@@ -12,10 +12,10 @@
     <title>Shopping Cart</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="../../css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../../css/style.css" rel="stylesheet">
 
   </head>
 
@@ -30,13 +30,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">SiipiLomat Oy</a>
+          <a class="navbar-brand" href="../../index.html">SiipiLomat Oy</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <li class="divider-vertical"></li>
             <li><a href="html/login.html">Sign In</a></li>
-            <li><a href="html/shopping-cart.html">Shopping Cart List Demo</a></li>
+            <li><a href="../shopping-cart.html">Shopping Cart List Demo</a></li>
             <li><a href="#">Help</a></li>
           </ul>
           <form class="navbar-form navbar-right">
@@ -62,30 +62,38 @@
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-          <div class="col-xs-6 col-md-3 thumbnails">
-            <article class="thumbnails">
-              <a href="html/products/angry-bird1.html">
-                <img src="tmp/luke_skywalker_bird_plush_toy--side.jpg" class="img-responsive" alt="Generic placeholder thumbnail">
-              </a>
-              <h5>Angry Birds</h5>
-              <a href="html/products/angry-bird1.html"><h4>Luke Skywalker Bird Plush Toy</h4></a>
-              <span class="text-muted">€10.99</span>
-            </article>
+          <div class="col-xs-6 col-md-4">
+            <img src="../../tmp/luke_skywalker_bird_plush_toy--side.jpg" class="img-responsive" alt="Generic placeholder">
           </div>
 
-          <div class="col-xs-6 col-md-3 thumbnails">
-              <article class="thumbnails">
-                <a href="#">
-                  <img src="tmp/Fazer_347_2013_XL.jpg" class="img-responsive" alt="Generic placeholder thumbnail">
-                </a>
-                <h5>Panda</h5>
-                <a href="#"><h4>Chocolate Raisins 240g</h4></a>
-                <span class="text-muted">€4.00</span>
-              </article>
+          <div class="col-md-8">
+            <br>
+            <h5>Angry Birds</h5>
+            <h3>Luke Skywalker Bird Plush Toy</h3>
+            <h4><span class="text-muted">€10.99</span><h4>
+            <br>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary">Add to Cart
+              </button>
+            </div>
+            <br>
           </div>
 
-        </div> <!-- main -->
+          <div class="col-md-8">
+            <br>
+            <h4>Description</h4>
+            <p>"Red Skywalker" is a hard-headed Rebel who is determined to become a great Jedi warrior. He wants to find the Egg and unravel its secret before the pigs find it.</p>
+
+            <h4>Details</h4>
+            <ul>
+              <li>Color: red</li>
+              <li>Material: polyester fibers and polyurethane foam</li>
+              <li>Size: 20cm x 20cm</li>
+            </ul>
+          </div>
+
+        </div>
+          
       </div> <!-- row -->
     </div> <!-- container -->
 
@@ -93,6 +101,6 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
   </body>
 </html>
