@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -19,10 +20,11 @@
   </head>
 
   <body>
+
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#base-nav-bar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -30,8 +32,9 @@
           </button>
           <a class="navbar-brand" href="../index.html">SiipiLomat Oy</a>
         </div>
-        <div class="navbar-collapse collapse">
+        <div class="navbar-collapse collapse" id="base-nav-bar">
           <ul class="nav navbar-nav navbar-right">
+            <!-- <li class="divider-vertical"></li> -->
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account Demo <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -39,7 +42,9 @@
                 <li><a href="#">Orders</a></li>
               </ul>
             </li>
-            <li><a href="#">Shopping Cart List Demo</a></li>
+            <li>
+              <a href="shopping-cart.html">Shopping Cart List Demo </a>
+            </li>
           </ul>
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Search...">
@@ -52,73 +57,53 @@
       <div class="row-fluid">
         <div class="col-sm-3 col-md-2 sidebar">
           <div class="well nav-sidebar">
-            <h5><span class="glyphicon glyphicon-shopping-cart"></span> Shopping Cart</h5>
+            <h5><span class="glyphicon glyphicon-shopping-cart"></span> Order Management</h5>
           </div>
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1>Current Shopping Cart</h1>
+          <h1>Orders</h1>
           <table class="table table-striped">
             <thead>
               <tr>
-                <th>Product</th>
-                <th>Number</th>
+                <th>ID</th>
+                <th>Flight</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Details</th>
+                <th>Edit</th>
                 <th>Delete</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>AngryBirds Luke Skywalker Bird Plush Toy</td>
-                <td><div class="col-xs-4">
-                  <input type="text" class="form-control input-sm" value="1"></div>
-                </td>
-                <td><div class="col-xs-2">
-                  <button type="button" class="btn btn-link btn-xs">
-                    <span class="glyphicon glyphicon-trash"> </span>
-                  </button></div>
-                </td>
+                <td>1111</td>
+                <td>AY991 HEL to TXL</td>
+                <td>05/07/2014</td>
+                <td><span class="label label-warning">Processing</span>
+                <td><a class='btn btn-info btn-xs' href="#"><span class="glyphicon glyphicon-info-sign"></span></a></td>
+                <td><a class='btn btn-primary btn-xs' href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <td><a class='btn btn-danger btn-xs' href="#"><span class="glyphicon glyphicon-trash"></span></a></td>
               </tr>
 
               <tr>
-                <td>Panda Chocolate Raisins 240g</td>
-                <td><div class="col-xs-4">
-                  <input type="text" class="form-control input-sm" value="1"></div>
-                </td>
-                <td><div class="col-xs-2">
-                  <button type="button" class="btn btn-link btn-xs">
-                    <span class="glyphicon glyphicon-trash"> </span>
-                  </button></div>
-                </td>
+                <td>2222</td>
+                <td>AY123 HEL to ABC</td>
+                <td>25/06/2014</td>
+                <td><span class="label label-success">Confirmed</span>
+                <td><a class='btn btn-info btn-xs' href="#"><span class="glyphicon glyphicon-info-sign"></span></a></td>
+                <td><a class='btn btn-primary btn-xs' href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <td><a class='btn btn-danger btn-xs' href="#"><span class="glyphicon glyphicon-trash"></span></a></td>
               </tr>
+              
             </tbody>
           </table>
-
-          <form action="checkout.html">
-            <div class="col-xs-3 pull-right">
-              <button type="submit" class="btn btn-primary btn-block">
-                Checkout
-              </button>
-            </div>
-          </form>
-
-          <div class="col-xs-3 pull-right">
-            <button type="button" class="btn btn-default btn-block">
-              Continue shopping
-            </button>
-          </div>
-        </div>
-
-        </div>
-
+        </div> <!-- main -->
 
       </div> <!-- row -->
     </div> <!-- container -->
 
-    
-
-
-
-  <!-- Bootstrap core JavaScript
+    <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="http://code.jquery.com/jquery-latest.js"></script>
