@@ -15,7 +15,7 @@ class Client {
     $this->fname = $fname;
     $this->lname = $lname;
     $this->password = $password;
-    $this->title = $title
+    $this->title = $title;
   }
 
   public function set_fname($fn) {
