@@ -1,17 +1,17 @@
-create table client
+create table users
 (
-    client_id       serial                        ,
-    title           varchar(10)                   ,
+    user_id         serial                not null,
+    title           varchar(10)           not null,
     fname           varchar(32)           not null,
     lname           varchar(32)           not null,
-    email           varchar(32)                   ,
-    passwd          varchar(32)                   ,
-    CONSTRAINT pk_client PRIMARY KEY(client_id)
+    email           varchar(32)           not null,
+    passwd          varchar(32)           not null,
+    CONSTRAINT pk_user PRIMARY KEY(user_id)
 );
 
-create table product
+create table products
 (
-    product_id      serial                        ,
+    product_id      serial                not null,
     name            varchar(40)           not null,
     image           bytea                         ,
     category        varchar(20)                   ,
@@ -21,13 +21,38 @@ create table product
     CONSTRAINT pk_product PRIMARY KEY (product_id)
 );
 
-create table cart_item
+create table cart_items
 (
-    item_id         serial                  ,
-    client_id       serial                  ,
-    product_id      serial                  ,
-    quantity        smallint                ,
-    CONSTRAINT pk_item PRIMARY KEY (item_id),
-    CONSTRAINT fk_item1 FOREIGN KEY (client_id) REFERENCES client(client_id),
-    CONSTRAINT fk_item2 FOREIGN KEY (product_id) REFERENCES product(product_id)
+    cart_item_id    serial          not null,
+    user_id         serial          not null,
+    product_id      serial          not null,
+    quantity        smallint        not null,
+    CONSTRAINT pk_cart_item PRIMARY KEY (cart_item_id),
+    CONSTRAINT fk1_cart_item FOREIGN KEY (user_id) REFERENCES users(user_id),
+    CONSTRAINT fk2_cart_item FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+
+create table orders
+(
+    order_id        serial          not null,
+    user_id         serial          not null,
+    flight_no       varchar(10)     not null,
+    flight_date     date            not null,
+    flight_seat     varchar(10)             ,
+    booking_date    date                    ,
+    status          varchar(20)             ,
+    requirement     varchar(1024)           ,
+    CONSTRAINT pk_order PRIMARY KEY (order_id),
+    CONSTRAINT fk_order FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+create table order_items
+(
+    order_item_id   serial          not null,
+    order_id        serial          not null,
+    product_id      serial          not null,
+    quantity        smallint        not null,
+    CONSTRAINT pk_order_item  PRIMARY KEY (order_item_id),
+    CONSTRAINT fk1_order_item FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    CONSTRAINT fk2_order_item FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
