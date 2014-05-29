@@ -1,25 +1,25 @@
 <?php
 
-require_once "lib/database-connection.php";
-require_once "lib/classes/client.php";
+require_once "lib/db.php";
+require_once "lib/classes/user.php";
 
-function get_all_client() {
-  $sql = "SELECT fname, email FROM client";
+function get_all_users() {
+  $sql = "SELECT fname, email FROM users";
   $query = get_database_connection()->prepare($sql);
   $query->execute();
     
   $results = array();
   foreach($query->fetchAll(PDO::FETCH_OBJ) as $r) {
-    $client = new Client();
-    $client->set_fname($r->fname);
-    $client->set_email($r->email);
+    $user = new User();
+    $user->set_fname($r->fname);
+    $user->set_email($r->email);
 
-    $results[] = $client;
+    $results[] = $user;
   }
   return $results;
 }
 
-  $clients = get_all_client();
+  $users = get_all_users();
 
 ?><!DOCTYPE HTML>
 <html>
@@ -27,9 +27,9 @@ function get_all_client() {
   <body>
     <h1>list element test</h1>
     <ul>
-    <?php foreach($clients as $client) {
-      $fname = $client->get_fname();
-      $email = $client->get_email(); ?>
+    <?php foreach($users as $user) {
+      $fname = $user->get_fname();
+      $email = $user->get_email(); ?>
       <li><?php echo "First name: $fname, Email: $email"; ?></li>
       <?php } ?>
     </ul>

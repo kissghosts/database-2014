@@ -5,19 +5,20 @@ create table users
     fname           varchar(32)           not null,
     lname           varchar(32)           not null,
     email           varchar(32)           not null,
-    passwd          varchar(32)           not null,
-    CONSTRAINT pk_user PRIMARY KEY(user_id)
+    passwd          varchar(256)          not null,
+    CONSTRAINT pk_user PRIMARY KEY(user_id),
+    CONSTRAINT unique_email UNIQUE (email)
 );
 
 create table products
 (
     product_id      serial                not null,
-    name            varchar(40)           not null,
+    name            varchar(50)           not null,
     image           bytea                         ,
-    category        varchar(20)                   ,
-    brand           varchar(20)                   ,
+    category        varchar(30)                   ,
+    brand           varchar(30)                   ,
     price           decimal(10,2)                 ,
-    description     varchar(1024)                 ,
+    description     text                          ,
     CONSTRAINT pk_product PRIMARY KEY (product_id)
 );
 
@@ -41,7 +42,7 @@ create table orders
     flight_seat     varchar(10)             ,
     booking_date    date                    ,
     status          varchar(20)             ,
-    requirement     varchar(1024)           ,
+    requirement     text                    ,
     CONSTRAINT pk_order PRIMARY KEY (order_id),
     CONSTRAINT fk_order FOREIGN KEY (user_id) REFERENCES users(user_id)
 );

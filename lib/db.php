@@ -6,7 +6,7 @@ function get_database_connection() {
   
   if ($connection == null) { 
     $connection = new PDO('pgsql:');
-    $connection->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+    $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   }
 
   return $connection;
