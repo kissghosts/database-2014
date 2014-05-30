@@ -3,7 +3,7 @@ require_once "../lib/db.php";
 
 function get_all_products() {
   $sql = "SELECT name, brand, price, image FROM products";
-  $query = get_database_connection()->prepare($sql);
+  $query = get_db_connection()->prepare($sql);
   $query->execute();
   
   $results = array();

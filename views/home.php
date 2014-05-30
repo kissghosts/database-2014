@@ -1,6 +1,7 @@
 <?php
   require_once('../lib/view_components.php');
 
+  session_start();
   gen_html_header('Shopping Cart', '../');
   gen_navbar("../");
 ?>
@@ -12,6 +13,6 @@
 </div>
 
 <?php
-  gen_footer('../');
+gen_footer_with_form_hash('../');
 
 ?>   

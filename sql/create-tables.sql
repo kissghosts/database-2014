@@ -5,7 +5,7 @@ create table users
     fname           varchar(32)           not null,
     lname           varchar(32)           not null,
     email           varchar(32)           not null,
-    passwd          varchar(256)          not null,
+    passwd          varchar(64)           not null,
     CONSTRAINT pk_user PRIMARY KEY(user_id),
     CONSTRAINT unique_email UNIQUE (email)
 );

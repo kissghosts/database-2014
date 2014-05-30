@@ -5,7 +5,7 @@ require_once "lib/classes/user.php";
 
 function get_all_users() {
   $sql = "SELECT fname, email FROM users";
-  $query = get_database_connection()->prepare($sql);
+  $query = get_db_connection()->prepare($sql);
   $query->execute();
     
   $results = array();
