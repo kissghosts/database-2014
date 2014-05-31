@@ -38,6 +38,7 @@ function register($email, $passwd, $fname, $lname) {
   return true;
 }
 
+// this function is not used anymore
 function login($email, $passwd) {
   // check username and password with db
   // if yes, return true
@@ -45,7 +46,16 @@ function login($email, $passwd) {
   
   // connect to db
   $conn = get_db_connection();
-  // check if username is unique
+  // check whether email address exists in db
+  $sql = "SELECT * from users where email = '".$email."'";
+  $query = $conn->prepare($sql);
+  $query->execute();
+  $result = $query->fetch();
+  
+  if (!$result) {
+    throw new Exception('the email address is not registered');
+  }
+  
   $sql = "SELECT * from users where email = '".$email."' and passwd = '"
           . $passwd . "'";
   $query = $conn->prepare($sql);
@@ -54,10 +64,10 @@ function login($email, $passwd) {
   $result = $query->fetch();
   
   if (!$result) {
-    throw new Exception('No user matched.');
-  } else {
-    return true;
+    throw new Exception('wrong password');
   }
+  
+  return true;
 }
 
 

@@ -1,13 +1,6 @@
-<?php
-  require_once('../lib/view_components.php');
-
-  gen_html_header('Shopping Cart', '../');
-  gen_simple_navbar('../');
-?>
-
 <div class="container col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
   <h1>Sign Up</h1>
-  <form method="post" action="../process_signup.php" accept-charset="UTF-8" class="form-horizontal" role="form">
+  <form method="post" action="<?php echo "$path"; ?>process_signup.php" accept-charset="UTF-8" class="form-horizontal" role="form">
     <fieldset>
       <!-- Form Name -->
       <legend></legend>
@@ -56,8 +49,3 @@
     </fieldset>
   </form>
 </div> <!-- /container -->
-
-<?php 
-gen_footer_with_form_hash('../');
-
-?>

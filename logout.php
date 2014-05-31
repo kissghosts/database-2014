@@ -6,7 +6,7 @@
   // store to test if they *were* logged in
   unset($_SESSION['valid_user']);
   $result_dest = session_destroy();
-  header('location: views/home.php');
+  header('location: index.php');
   
 ?>
 
