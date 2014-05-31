@@ -8,6 +8,7 @@ General Links
 * [Connection Test Program](http://yfliu.users.cs.helsinki.fi/database-app/connectiontest.php)
 * [HTML Demo Page](http://yfliu.users.cs.helsinki.fi/database-app/html-demo/index.html)
 * [Simple Database listing](http://yfliu.users.cs.helsinki.fi/database-app/listtest.php)
+* [Application Home Page](http://yfliu.users.cs.helsinki.fi/database-app/index.php)
 
 ### Topic
 
