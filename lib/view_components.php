@@ -6,7 +6,7 @@
  * NOTE: most of the view components are put in folder "views"
  */
 
-require_once "db.php";
+require_once(dirname(__FILE__).'/db.php');
 
 function get_all_categories() {
   $sql = "SELECT DISTINCT category FROM products ORDER BY category";

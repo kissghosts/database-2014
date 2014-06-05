@@ -1,7 +1,7 @@
 <?php
 
 require_once "lib/db.php";
-require_once "lib/classes/user.php";
+require_once "lib/models/user.php";
 
 function get_all_users() {
   $sql = "SELECT fname, email FROM users";

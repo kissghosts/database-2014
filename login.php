@@ -1,6 +1,6 @@
 <?php
 
-  require_once('lib/db.php');
+  require_once 'lib/models/user.php';
   require_once('lib/view_components.php');
   
   session_start();
@@ -12,15 +12,8 @@
 
     if ($email && $passwd) {
 
-      // connect to db
-      $conn = get_db_connection();
-      // check whether email address exists in db
-      $sql = "SELECT * from users where email = '".$email."'";
-      $query = $conn->prepare($sql);
-      $query->execute();
-      $result = $query->fetch();
-
-      if (!$result) {
+      // check whether user exists in database
+      if (!User::is_user_existed_in_db($email)) {
         require 'views/html_header.php';
         require 'views/simple_navbar.php';
         html_alert_info('Login failed: ', 'the email address is not registered <br>');
@@ -30,13 +23,7 @@
         exit;
       }
 
-      $sql = "SELECT * from users where email = '".$email."' and passwd = '"
-              . $passwd . "'";
-      $query = $conn->prepare($sql);
-      $query->execute();
-
-      $result = $query->fetch();
-
+      $result = User::check_user($email, $passwd);
       if (!$result) {
         require 'views/html_header.php';
         require 'views/simple_navbar.php';
@@ -44,10 +31,11 @@
         gen_login_form($email, $path);
         require 'views/html_footer_with_form_hash.php';
         exit;
+      } else if ($result == 'customer') {
+        $_SESSION['valid_user'] = $email;
+      } else if ($result == 'staff') {
+        $_SESSION['staff_user'] = $email;
       }
-
-      // if they are in the database register the user id
-      $_SESSION['valid_user'] = $email;
 
       header('location: index.php');
     }

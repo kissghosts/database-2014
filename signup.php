@@ -1,5 +1,4 @@
 <?php
-  // require_once('../lib/view_components.php');
   
   $path = '';
 

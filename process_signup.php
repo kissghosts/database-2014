@@ -1,6 +1,6 @@
 <?php
 
-  require_once 'lib/user_auth.php';
+  require_once 'lib/models/user.php';
   require_once 'lib/view_components.php';
 
   $email = $_POST['email'];
@@ -12,13 +12,20 @@
   session_start();
   
   $path = '';
+  // currently only customer user could be registered
+  $title = 'customer';
   
   try {
-    // attempt to register
+    // attempt to register a customer
     // this function can also throw an exception
-    register($email, $passwd, $fname, $lname);
+    User::register_user_in_db($email, $passwd, $fname, $lname, $title);
+    
     // register session variable
-    $_SESSION['valid_user'] = $email;
+    if ($title == 'customer') {
+      $_SESSION['valid_user'] = $email;
+    } else if ($title == 'staff') {
+      $_SESSION['staff_user'] = $email;
+    }
     
     gen_html_redirect_header('Shopping Cart', $path, 'index.php', '4');
     require 'views/simple_navbar.php';
