@@ -1,6 +1,10 @@
 database-2014
 =============
 
+A simple shopping cart application
+
+Assignment code for Univ Helsinki, database application course
+
 General Links
 
 * [GitHub repository](https://github.com/kissghosts/database-2014)
