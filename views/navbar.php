@@ -11,7 +11,16 @@
     </div>
     <div class="navbar-collapse collapse" id="base-nav-bar">
       <ul class="nav navbar-nav navbar-right">
-      <?php if (isset($_SESSION['valid_user'])) { ?>
+      <?php if (isset($_SESSION['staff_user'])) {?>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Management <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="<?php echo $path; ?>add_product.php">Add New Products</a></li>
+            <li><a href="#">Orders</a></li>
+          </ul>
+        </li>
+        <li><a href="<?php echo "$path"; ?>logout.php">Log Out</a></li>
+      <?php } else if (isset($_SESSION['valid_user'])) { ?>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
           <ul class="dropdown-menu">
@@ -33,6 +42,14 @@
               <input class="btn btn-primary btn-block" type="button" id="sign-in" name="sign-in" value="Sign In" onclick="signin_form_hash(this.form, this.form.password);" />
               <br>
             </form>
+            <p><strong>testing account</strong><br>staff: </p>
+            <div class="alert alert-info">
+              staff@test.com, 123456
+            </div>
+            <p>customer: </p>
+            <div class="alert alert-info">
+              customer@test.com, 123456
+            </div>
           </div>
         </li>
         <li><a href="<?php echo "$path";?>signup.php">Sign Up</a></li>

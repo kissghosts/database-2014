@@ -27,23 +27,23 @@
       $_SESSION['staff_user'] = $email;
     }
     
-    gen_html_redirect_header('Shopping Cart', $path, 'index.php', '4');
+    gen_html_redirect_header($path, 'index.php', '4');
     require 'views/simple_navbar.php';
     
     $msg = 'If you are not redirected to the home page, please click '
             . '<a href="views/home.php">here</a>.';
     gen_simple_context('Congratulations, registration successful', $msg);
-    require 'views/html_header.php';
+    require 'views/html_footer.php';
 
   } catch (Exception $e) {
-    gen_html_redirect_header('Shopping Cart', $path, 'signup.php', '4');
+    gen_html_redirect_header($path, 'signup.php', '4');
     require 'views/simple_navbar.php';
     
     $err_msg = $e->getMessage();
     $msg = 'Error code: ' . $err_msg . ' <br> ';
     gen_simple_context('Oops, registration failed', $msg);
     
-    require 'views/html_header.php';
+    require 'views/html_footer.php';
     exit;
   }
 ?>

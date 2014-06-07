@@ -4,7 +4,7 @@ create table users
     title           varchar(10)           not null,
     fname           varchar(32)           not null,
     lname           varchar(32)           not null,
-    email           varchar(32)           not null,
+    email           varchar(64)           not null,
     passwd          varchar(64)           not null,
     CONSTRAINT pk_user PRIMARY KEY(user_id),
     CONSTRAINT unique_email UNIQUE (email)
@@ -13,11 +13,11 @@ create table users
 create table products
 (
     product_id      serial                not null,
-    name            varchar(50)           not null,
-    image           bytea                         ,
-    category        varchar(30)                   ,
-    brand           varchar(30)                   ,
-    price           decimal(10,2)                 ,
+    name            varchar(128)          not null,
+    imgurl          text                  not null,
+    category        varchar(64)           not null,
+    brand           varchar(64)                   ,
+    price           decimal(10,2)         not null,
     description     text                          ,
     CONSTRAINT pk_product PRIMARY KEY (product_id)
 );
