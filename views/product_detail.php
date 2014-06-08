@@ -25,16 +25,20 @@
     
     <?php if (isset($_SESSION['staff_user'])) { ?>
       <div class="col-xs-3 pull-right">
-        <button type="button" class="btn btn-primary btn-block">
-          Edit
-        </button>
+        <a href="<?php echo $path."product_form.php?id=".$product->get_id(); ?>">
+          <button type="button" class="btn btn-primary btn-block">Edit</button>
+        </a>
       </div>
 
       <div class="col-xs-3 pull-right">
-        <button type="button" class="btn btn-danger btn-block">
-          Delete
-        </button>
+        <form method="post" action="<?php echo $path; ?>product_management.php" accept-charset="UTF-8" class="form-horizontal" role="form">
+          <input type="hidden" name="type" value="delete">
+          <input type="hidden" name="id" value="<?php echo $product->get_id(); ?>">
+          <button type="submit" class="btn btn-danger btn-block">Delete</button>
+        </form>
       </div>
+    
+      
     <?php } ?>
   </div>
 

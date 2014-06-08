@@ -28,8 +28,15 @@
     
     
     foreach(Product::get_products_by_category($category, $limit, $offset) as $p) {
-      $product = new Product($p->product_id, $p->name, $p->category,
-                             $p->brand, $p->price, $p->imgurl, $p->description);
+      $product = new Product();
+      $product->set_id($p->product_id);
+      $product->set_name($p->name);
+      $product->set_category($p->category);
+      $product->set_brand($p->brand);
+      $product->set_price($p->price);
+      $product->set_image_info($p->imgurl);
+      $product->set_description($p->description);
+      
       $products[] = $product;
     }
     
@@ -38,8 +45,15 @@
     $product_total_num = Product::get_product_num();
     
     foreach(Product::get_products($limit, $offset) as $p) {
-      $product = new Product($p->product_id, $p->name, $p->category,
-                             $p->brand, $p->price, $p->imgurl, $p->description);
+      $product = new Product();
+      $product->set_id($p->product_id);
+      $product->set_name($p->name);
+      $product->set_category($p->category);
+      $product->set_brand($p->brand);
+      $product->set_price($p->price);
+      $product->set_image_info($p->imgurl);
+      $product->set_description($p->description);
+      
       $products[] = $product;
     }
   }
@@ -54,6 +68,6 @@
   require 'views/sidebar.php';
   require 'views/product_list.php';
   require 'views/main_body_end.php';
-  require 'views/html_footer_with_hash_form.php';
+  require 'views/html_footer_with_form_hash.php';
 
 ?>

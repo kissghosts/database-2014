@@ -88,4 +88,12 @@ function signup_form_hash(form, email, fname, lname, password, password2) {
   return true;
 }
 
+function delete_confirm(form) {
+  var result = confirm("Want to delete?");
+  if (result == true) {
+    form.submit();
+  }
+  return true;
+}
+
 

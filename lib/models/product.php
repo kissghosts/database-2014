@@ -16,15 +16,38 @@ class Product {
   private $price;
   private $img;
   private $description;
+  private $errors = array();
   
-  public function __construct($id, $name, $category, $brand, $price, $img, $descrpt) {
-    $this->id = $id;
-    $this->name = $name;
-    $this->category = $category;
-    $this->brand = $brand;
-    $this->price = $price;
-    $this->img = $img;
-    $this->description = $descrpt;
+  public function __construct() {
+    // put attribute initialization in each setter
+  }
+  
+//  public function __construct($id, $name, $category, $brand, $price, $img, $descrpt) {
+//    $this->id = $id;
+//    $this->name = $name;
+//    $this->category = $category;
+//    $this->brand = $brand;
+//    $this->price = $price;
+//    $this->img = $img;
+//    $this->description = $descrpt;
+//  }
+  
+  
+  /*
+   * get product with a specific name and category
+   * input: name, category
+   * return PDO fetched array (style PDO::FETCH_OBJ)
+   */
+  public static function get_product_by_name_and_category($name, $category) {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "SELECT * FROM products WHERE name='" . $name . "' and category='"
+          .$category . "'";
+    $query = $conn->prepare($sql);
+    $query->execute();
+
+    $r = $query->fetch(PDO::FETCH_OBJ);
+    return $r;
   }
   
   /*
@@ -48,16 +71,17 @@ class Product {
     // if ok, add in db
     $sql = "INSERT INTO products "
             . "(name, category, brand, price, imgurl, description) VALUES "
-            . "(:name,:category,:brand,:price,:imgurl,:description)";
+            . "(:name,:category,:brand,:price,:imgurl,:description) "
+            . "RETURNING id";
     $query = $conn->prepare($sql);
-    $result = $query->execute(array(':name'=>$name,
+    $id = $query->execute(array(':name'=>$name,
                                     ':category'=>$category,
                                     ':brand'=>$brand,
                                     ':price'=>$price,
                                     ':imgurl'=>$img,
                                     ':description'=>$des));
 
-    if (!$result) {
+    if (!$id) {
       return false;
     }
     return true;
@@ -151,44 +175,161 @@ class Product {
     return $row;
   }
   
+  /*
+   * delete product
+   * input: id
+   * return true or false
+   */
+  public static function delete_product_by_id($id) {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "DELETE FROM products WHERE product_id = '" . $id . "'";
+    $query = $conn->prepare($sql);
+    $r = $query->execute();
+
+    return $r;
+  }
   
   
   
+  public function set_id($id) {
+    $this->id = $id;
+  }
   
   public function get_id() {
     return $this->id;
+  }
+  
+  public function set_name($name) {
+    $this->name = trim($name);
+    
+    if ($this->name == '') {
+      $this->errors['name'] = "Name should not be blank.";
+    } else { 
+      unset($this->errors['name']);
+    }
   }
   
   public function get_name() {
     return $this->name;
   }
   
-  public function set_name($n) {
-    $this->name = $n;
-  }
-  
   public function get_category() {
     return $this->category;
   }
   
-  public function set_category($c) {
-    $this->category = $c;
+  public function set_category($category) {
+    $this->category = trim($category);
+    
+    if ($this->category == '') {
+      $this->errors['category'] = "Category should not be blank.";
+    } else { 
+      unset($this->errors['category']);
+    }
   }
   
   public function get_brand() {
     return $this->brand;
   }
   
+  public function set_brand($brand) {
+    $this->brand = trim($brand);
+    
+    if ($this->brand == '') {
+      $this->errors['brand'] = "Brand should not be blank.";
+    } else { 
+      unset($this->errors['brand']);
+    }
+  }
+  
   public function get_price() {
     return $this->price;
+  }
+  
+  public function set_price($price) {
+    $this->price = $price;
+    
+    if (!is_numeric($this->price)) {
+      $this->errors['price'] = "Price should be a number.";
+    } else if ($this->price <= 0) {
+      $this->errors['price'] = "Price should be a positive number.";
+    } else {
+      unset($this->errors['price']);
+    }
   }
   
   public function get_image_info() {
     return $this->img;
   }
   
+  public function set_image_info($url) {
+    $this->img = trim($url);
+    
+    // the input html5 form should have check this as a url
+    // here I just specify it to a http link
+    // this may be changed later
+    if (substr($this->img, 0, 7) == 'http://') {
+      unset($this->errors['img']);
+    } else {
+      $this->errors['img'] = "Currently only HTTP url is accepted for image";
+    }
+  }
+
   public function get_description() {
     return $this->description;
+  }
+  
+  public function set_description($des) {
+    // currently no restriction on this :)
+    
+    $this->description = trim($des);
+  }
+  
+  public function contains_error_attribute() {
+    return !empty($this->errors);
+  }
+  
+  public function get_error_array() {
+    return $this->errors;
+  }
+  
+  /*
+   * add new product into db
+   * return product_id (empty if failed)
+   */
+  public function insert_to_db() {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "INSERT INTO products "
+            . "(name, category, brand, price, imgurl, description) VALUES "
+            . "(:name,:category,:brand,:price,:imgurl,:description) "
+            . "RETURNING product_id";
+    $query = $conn->prepare($sql);
+    $id = $query->execute(array(':name'=>  $this->name,
+                                    ':category'=>  $this->category,
+                                    ':brand'=>  $this->brand,
+                                    ':price'=>  $this->price,
+                                    ':imgurl'=>  $this->img,
+                                    ':description'=>  $this->description));
+
+    return $id;
+  }
+  
+  /*
+   * updata product info in db
+   * return true or false
+   */
+  public function update_in_db() {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "UPDATE products SET name=?, category=?, brand =?, "
+            . "price=?, imgurl=?, description=? WHERE product_id=?";
+
+    $query = $conn->prepare($sql);
+    $result = $query->execute(array($this->name, $this->category, $this->brand, 
+                                    $this->price, $this->img, 
+                                    $this->description, $this->id));
+    return $result;
   }
   
 }

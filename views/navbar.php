@@ -15,7 +15,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Management <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="<?php echo $path; ?>add_product.php">Add New Products</a></li>
+            <li><a href="<?php echo $path; ?>product_form.php">Add New Products</a></li>
             <li><a href="#">Orders</a></li>
           </ul>
         </li>

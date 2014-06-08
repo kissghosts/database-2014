@@ -18,3 +18,9 @@ General Links
 
 [Shopping bag](http://advancedkittenry.github.io/suunnittelu_ja_tyoymparisto/aiheet/Ostoskassi.html)
 
+### Account for testing
+* Staff administrator email and password:
+    staff@test.com, 123456 
+* Customer admin email and password:
+    customer@test.com, 123456
+
