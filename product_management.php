@@ -8,7 +8,7 @@
     $product = new Product();
     
     if ($id != '') {
-      $product->set_name($id);
+      $product->set_id($id);
     }
     $product->set_name($name);
     $product->set_brand($brand);
@@ -108,7 +108,7 @@
           exit;
         }
 
-      } elseif ($type == 'edit' && isset ($_POST['id'])) {
+      } elseif ($type == 'edit' && isset($_POST['id'])) {
         $product = form_prechecking($_POST['id'], 
                                     htmlspecialchars($_POST['name']), 
                                     htmlspecialchars($_POST['category']), 
@@ -119,8 +119,7 @@
 
         if ($product->update_in_db()) {
           $msg = 'If you are not redirected to the home page, please click '
-                  . '<a href="views/home.php">here</a>. ' . $product->get_price()
-                  . ' ' . round(floatval($_POST['price']), 2);
+                  . '<a href="views/home.php">here</a>.';
           redirect_page($path, 'index.php', '4', $msg, 'Product editing successful');
           exit;
         } else {
