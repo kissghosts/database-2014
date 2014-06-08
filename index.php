@@ -50,7 +50,10 @@
   // html view
   require 'views/html_header.php';
   require 'views/navbar.php';
-  require 'views/main_body.php';
-  require 'views/html_footer_with_form_hash.php';
+  require 'views/main_body_start.php';
+  require 'views/sidebar.php';
+  require 'views/product_list.php';
+  require 'views/main_body_end.php';
+  require 'views/html_footer_with_hash_form.php';
 
 ?>

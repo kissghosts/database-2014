@@ -104,7 +104,7 @@ class Product {
    * get existing products from db
    * input: sql select limit number and offset, these are required for
    *        display products with pagination
-   * return PDO fetchAll array (stype PDO::FETCH_OBJ)
+   * return PDO fetchAll array (style PDO::FETCH_OBJ)
    */
   public static function get_products($limit, $offset) {
     // connect to db
@@ -121,7 +121,7 @@ class Product {
    * get products from a specific category
    * input: category in string
    *        limit, offset
-   * return PDO fetchAll array (stype PDO::FETCH_OBJ)
+   * return PDO fetchAll array (style PDO::FETCH_OBJ)
    */
   public static function get_products_by_category($category, $limit, $offset) {
     // connect to db
@@ -133,6 +133,22 @@ class Product {
 
     $rows = $query->fetchAll(PDO::FETCH_OBJ);
     return $rows;
+  }
+  
+  /*
+   * get product with a specific id
+   * input: id
+   * return PDO fetched array (style PDO::FETCH_OBJ)
+   */
+  public static function get_product_by_id($id) {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "SELECT * FROM products WHERE product_id='" . $id . "'";
+    $query = $conn->prepare($sql);
+    $query->execute();
+
+    $row = $query->fetch(PDO::FETCH_OBJ);
+    return $row;
   }
   
   
