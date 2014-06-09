@@ -57,18 +57,6 @@ class Product {
   public static function add_product_to_db($name, $category, $brand, $price, $img, $des) {
     // connect to db
     $conn = get_db_connection();
-    // check if username is unique
-    $sql = "SELECT * FROM products WHERE name='".$name
-            ."' and category='".$category."'";
-    $query = $conn->prepare($sql);
-    $query->execute();
-    $result = $query->fetch();
-
-    if ($result) {
-      throw new Exception('Same product exists.');
-    }
-
-    // if ok, add in db
     $sql = "INSERT INTO products "
             . "(name, category, brand, price, imgurl, description) VALUES "
             . "(:name,:category,:brand,:price,:imgurl,:description) "
@@ -160,6 +148,34 @@ class Product {
   }
   
   /*
+   * search product
+   * input: keyword string, limit, offset
+   * return PDO fetchAll array (style PDO::FETCH_OBJ)
+   */
+  public static function search_products($keyword, $limit, $offset) {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "SELECT * FROM products WHERE lower(name) LIKE ? OR lower(brand) LIKE ? "
+            . "ORDER BY name LIMIT ? OFFSET ?";
+    $query = $conn->prepare($sql);
+    $query->execute(array('%'.$keyword.'%', '%'.$keyword.'%', $limit, $offset));
+
+    $rows = $query->fetchAll(PDO::FETCH_OBJ);
+    return $rows;
+  }
+  
+  /*
+   * get row number of products from a specified search
+   * return row number
+   */
+  public static function get_product_num_by_search($keyword) {
+    $sql = "SELECT count(*) FROM products WHERE lower(name) = ? OR lower(brand) = ?";
+    $query = get_db_connection()->prepare($sql);
+    $query->execute(array($keyword, $keyword));
+    return $query->fetchColumn();
+  }
+  
+  /*
    * get product with a specific id
    * input: id
    * return PDO fetched array (style PDO::FETCH_OBJ)
@@ -174,6 +190,7 @@ class Product {
     $row = $query->fetch(PDO::FETCH_OBJ);
     return $row;
   }
+  
   
   /*
    * delete product

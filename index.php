@@ -2,6 +2,20 @@
   // home page for the shopping cart
   require_once 'lib/db.php';
   require_once 'lib/models/product.php';
+  
+  function init_product_from_fetch_object($obj) {
+    $product = new Product();
+    
+    $product->set_id($obj->product_id);
+    $product->set_name($obj->name);
+    $product->set_category($obj->category);
+    $product->set_brand($obj->brand);
+    $product->set_price($obj->price);
+    $product->set_image_info($obj->imgurl);
+    $product->set_description($obj->description);
+    
+    return $product;
+  }
 
   session_start();
   
@@ -23,38 +37,27 @@
     }
   }
   
-  if (isset($_GET['category'])) {
+  if (isset($_POST['search'])) {
+    $search_keyword = $_POST['search'];
+    $product_total_num = Product::get_product_num_by_search($search_keyword);
+    
+    foreach(Product::search_products($search_keyword, $limit, $offset) as $p) {
+      $product = init_product_from_fetch_object($p);
+      $products[] = $product;
+    }
+  } elseif (isset($_GET['category'])) {
     $category = $_GET['category'];
     $product_total_num = Product::get_product_num_by_category($category);
     
-    
     foreach(Product::get_products_by_category($category, $limit, $offset) as $p) {
-      $product = new Product();
-      $product->set_id($p->product_id);
-      $product->set_name($p->name);
-      $product->set_category($p->category);
-      $product->set_brand($p->brand);
-      $product->set_price($p->price);
-      $product->set_image_info($p->imgurl);
-      $product->set_description($p->description);
-      
+      $product = init_product_from_fetch_object($p);
       $products[] = $product;
     }
-    
-    
   } else { // all products
     $product_total_num = Product::get_product_num();
     
     foreach(Product::get_products($limit, $offset) as $p) {
-      $product = new Product();
-      $product->set_id($p->product_id);
-      $product->set_name($p->name);
-      $product->set_category($p->category);
-      $product->set_brand($p->brand);
-      $product->set_price($p->price);
-      $product->set_image_info($p->imgurl);
-      $product->set_description($p->description);
-      
+      $product = init_product_from_fetch_object($p);
       $products[] = $product;
     }
   }

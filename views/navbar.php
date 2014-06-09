@@ -56,8 +56,8 @@
         <?php }?>
        
       </ul>
-      <form class="navbar-form navbar-right">
-        <input type="text" class="form-control" placeholder="Search...">
+      <form class="navbar-form navbar-right" method="post" action="<?php echo "$path"; ?>index.php" accept-charset="UTF-8">
+        <input type="text" id="search" name="search" class="form-control" placeholder="Search...">
       </form>
     </div>
   </div>
