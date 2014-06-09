@@ -10,6 +10,7 @@
   $limit = 9;
   $offset = 0;
   $currnt_page = 0;  // start page number is 0 (the first index page)
+  $category = '';
   $products = array();
   
   $categories = Product::get_all_categories();
