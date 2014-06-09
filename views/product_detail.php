@@ -34,7 +34,7 @@
         <form method="post" action="<?php echo $path; ?>product_management.php" accept-charset="UTF-8" class="form-horizontal" role="form">
           <input type="hidden" name="type" value="delete">
           <input type="hidden" name="id" value="<?php echo $product->get_id(); ?>">
-          <button type="submit" class="btn btn-danger btn-block">Delete</button>
+          <button type="button" class="btn btn-danger btn-block" onclick="delete_confirm(this.form);">Delete</button>
         </form>
       </div>
     
