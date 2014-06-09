@@ -8,12 +8,12 @@
       <div class="form-group row">
         <label class="col-sm-2 control-label" for="textinput">First Name</label>
         <div class="col-sm-4">
-          <input type="name" class="form-control" id="fname" name="fname">
+          <input type="name" class="form-control" id="fname" name="fname" value="<?php if (isset($fname)) {echo $fname;} ?>">
         </div>
 
         <label class="col-sm-2 control-label" for="textinput">Sur Name</label>
         <div class="col-sm-4">
-          <input type="name" class="form-control" id="lname" name="lname">
+          <input type="name" class="form-control" id="lname" name="lname" value="<?php if (isset($lname)) {echo $lname;} ?>">
         </div>
       </div>
 
@@ -21,7 +21,7 @@
       <div class="form-group">
         <label class="col-sm-2 control-label" for="textinput">Email</label>
         <div class="col-sm-4">
-          <input type="email" placeholder="example@abc.com" class="form-control" id="email" name="email">
+          <input type="email" placeholder="example@abc.com" class="form-control" id="email" name="email" value="<?php if (isset($email)) {echo $email;} ?>">
         </div>
       </div>
 

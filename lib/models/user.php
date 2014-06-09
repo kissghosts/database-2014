@@ -22,18 +22,6 @@ class User {
   public static function register_user_in_db($email, $passwd, $fname, $lname, $title) {
     // connect to db
     $conn = get_db_connection();
-    // check if username is unique
-    $sql = "SELECT * from users where email='".$email."'";
-    $query = $conn->prepare($sql);
-    $query->execute();
-    $result = $query->fetch();
-
-    if ($result) {
-      throw new Exception('The given email address has been taken, '
-                          . 'please choose another one');
-    }
-
-    // if ok, put in db
     $sql = "INSERT INTO users (title, fname, lname, email, passwd) VALUES "
           . "(:title,:fname,:lname,:email,:passwd)";
     $query = $conn->prepare($sql);

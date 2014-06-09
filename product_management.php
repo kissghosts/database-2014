@@ -41,25 +41,15 @@
     if ($id != '') {
       $p = Product::get_product_by_id($id);
       if (!$p) { // no product found
-        gen_html_redirect_header($path, 'index.php', '4');
-        require 'views/simple_navbar.php';
-
         $msg = 'Error product id!';
-        gen_simple_context('Oops, editing failed', $msg);
-
-        require 'views/html_footer.php';
+        redirect_page($path, 'index.php', '4', $msg, 'Editing failed');
         exit;
       }
     } else {
       $p = Product::get_product_by_name_and_category($name, $category);
       if ($p) { // same product found
-        gen_html_redirect_header($path, 'product_form.php', '4');
-        require 'views/simple_navbar.php';
-
         $msg = 'Same product found!';
-        gen_simple_context('Oops, adding failed', $msg);
-
-        require 'views/html_footer.php';
+        redirect_page($path, 'index.php', '4', $msg, 'Adding failed');
         exit;
       }
     }
@@ -67,12 +57,6 @@
     return $product;
   }
   
-  function redirect_page($path, $page, $time, $msg, $title) {
-    gen_html_redirect_header($path, $page, $time);
-    require 'views/simple_navbar.php';
-    gen_simple_context($title, $msg);
-    require 'views/html_footer.php';
-  }
   
   // start session
   session_start();

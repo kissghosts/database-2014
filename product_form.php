@@ -15,22 +15,14 @@
     try {
       $p = Product::get_product_by_id($id);
     } catch (Exception $ex) {
-      gen_html_redirect_header($path, 'index.php', '4');
-      require 'views/simple_navbar.php';
-
       $msg = 'Error: illegal server query <br> Redirect back to homepage!';
-      gen_simple_context('Oops, illegal query!!!', $msg);
-      require 'views/html_footer.php';
+      redirect_page($path, 'index.php', '4', $msg, 'Illegal query!!!');
       exit;
     }
 
     if (!$p) {
-      gen_html_redirect_header($path, 'index.php', '4');
-      require 'views/simple_navbar.php';
-
       $msg = 'Error: no such product found in server <br> Redirect back to homepage!';
-      gen_simple_context('Oops, illegal query!!!', $msg);
-      require 'views/html_footer.php';
+      redirect_page($path, 'index.php', '4', $msg, 'Illegal query!!!');
       exit;
     }
     

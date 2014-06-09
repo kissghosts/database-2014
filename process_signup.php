@@ -18,6 +18,9 @@
   try {
     // attempt to register a customer
     // this function can also throw an exception
+    if (User::is_user_existed_in_db($email)) {
+      throw new Exception('Your given email has been registered');
+    }
     User::register_user_in_db($email, $passwd, $fname, $lname, $title);
     
     // register session variable
@@ -26,25 +29,19 @@
     } else if ($title == 'staff') {
       $_SESSION['staff_user'] = $email;
     }
-    
-    gen_html_redirect_header($path, 'index.php', '4');
-    require 'views/simple_navbar.php';
-    
+
     $msg = 'If you are not redirected to the home page, please click '
             . '<a href="views/home.php">here</a>.';
-    gen_simple_context('Congratulations, registration successful', $msg);
-    require 'views/html_footer.php';
+    redirect_page($path, 'index.php', '4', $msg, 'Registration successful!');
+    exit;
 
   } catch (Exception $e) {
-    gen_html_redirect_header($path, 'signup.php', '4');
+    $msg = 'Error: ' . $e->getMessage();
+    require 'views/html_header.php';
     require 'views/simple_navbar.php';
-    
-    $err_msg = $e->getMessage();
-    $msg = 'Error code: ' . $err_msg . ' <br> ';
-    gen_simple_context('Oops, registration failed', $msg);
-    
-    require 'views/html_footer.php';
-    exit;
+    html_alert_info('Sign-up failed: ', $msg . '<br>');
+    require 'views/signup_form.php';
+    require 'views/html_footer_with_form_hash.php';
   }
 ?>
 
