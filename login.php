@@ -23,22 +23,27 @@
         exit;
       }
 
-      $result = User::check_user($email, $passwd);
-      if (!$result) {
+      $u = User::get_user_by_email_and_passwd($email, $passwd);
+      if (!$u) {
         require 'views/html_header.php';
         require 'views/simple_navbar.php';
         html_alert_info('Login failed: ', 'wrong password <br>');
         gen_login_form($email, $path);
         require 'views/html_footer_with_form_hash.php';
         exit;
-      } else if ($result == 'customer') {
-        $_SESSION['valid_user'] = $email;
-      } else if ($result == 'staff') {
-        $_SESSION['staff_user'] = $email;
+      }
+      $title = $u->title;
+      $id = $u->user_id;
+     
+      if ($title == 'customer') {
+        $_SESSION['valid_user'] = $id;
+      } else if ($title == 'staff') {
+        $_SESSION['staff_user'] = $id;
       }
 
       header('location: index.php');
     }
+    
   } else {
     require 'views/html_header.php';
     require 'views/simple_navbar.php';

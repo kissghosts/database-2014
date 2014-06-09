@@ -21,13 +21,13 @@
     if (User::is_user_existed_in_db($email)) {
       throw new Exception('Your given email has been registered');
     }
-    User::register_user_in_db($email, $passwd, $fname, $lname, $title);
+    $id = User::register_user_in_db($email, $passwd, $fname, $lname, $title);
     
     // register session variable
     if ($title == 'customer') {
-      $_SESSION['valid_user'] = $email;
+      $_SESSION['valid_user'] = $id;
     } else if ($title == 'staff') {
-      $_SESSION['staff_user'] = $email;
+      $_SESSION['staff_user'] = $id;
     }
 
     $msg = 'If you are not redirected to the home page, please click '

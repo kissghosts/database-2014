@@ -23,18 +23,19 @@ class User {
     // connect to db
     $conn = get_db_connection();
     $sql = "INSERT INTO users (title, fname, lname, email, passwd) VALUES "
-          . "(:title,:fname,:lname,:email,:passwd)";
+          . "(:title,:fname,:lname,:email,:passwd) "
+          . "RETURNING user_id";
     $query = $conn->prepare($sql);
-    $result = $query->execute(array(':title'=>$title,
+    $id = $query->execute(array(':title'=>$title,
                                     ':fname'=>$fname,
                                     ':lname'=>$lname,
                                     ':email'=>$email,
                                     ':passwd'=>$passwd));
 
-    if (!$result) {
+    if (!$id) {
       throw new Exception('Could not register, please try it later');
     }
-    return true;
+    return $id;
   }
   
   /*
@@ -61,7 +62,7 @@ class User {
    * if matched, return user type (title)
    * otherelse return false
    */
-  public static function check_user($email, $passwd) {
+  public static function get_user_by_email_and_passwd($email, $passwd) {
     $conn = get_db_connection();
     $sql = "SELECT * from users where email = '".$email."' and passwd = '"
             . $passwd . "'";
@@ -69,11 +70,7 @@ class User {
     $query->execute();
 
     $result = $query->fetch(PDO::FETCH_OBJ);
-    if (!$result) {
-      return FALSE;
-    } else {
-      return $result->title;
-    }
+    return $result;
   }
 
   public function set_fname($fn) {
