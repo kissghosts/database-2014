@@ -323,11 +323,11 @@ class Product {
             . "RETURNING product_id";
     $query = $conn->prepare($sql);
     $id = $query->execute(array(':name'=>  $this->name,
-                                    ':category'=>  $this->category,
-                                    ':brand'=>  $this->brand,
-                                    ':price'=>  $this->price,
-                                    ':imgurl'=>  $this->img,
-                                    ':description'=>  $this->description));
+                                ':category'=>  $this->category,
+                                ':brand'=>  $this->brand,
+                                ':price'=>  $this->price,
+                                ':imgurl'=>  $this->img,
+                                ':description'=>  $this->description));
 
     return $id;
   }
