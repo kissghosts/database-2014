@@ -4,7 +4,7 @@ require_once(dirname(__FILE__).'/../db.php');
 
 class User {
   
-  // private $id;
+  private $id;
   private $fname;
   private $lname;
   private $email;
@@ -59,8 +59,8 @@ class User {
   
   /*
    * check whether email and password matched in database
-   * if matched, return user type (title)
-   * otherelse return false
+   * if matched, return user object
+   * otherelse return empty object
    */
   public static function get_user_by_email_and_passwd($email, $passwd) {
     $conn = get_db_connection();
@@ -72,7 +72,26 @@ class User {
     $result = $query->fetch(PDO::FETCH_OBJ);
     return $result;
   }
+  
+  /*
+   * check whether email and password matched in database
+   * if matched, return user type (title)
+   * otherelse return false
+   */
+  public static function get_user_by_userid($user_id) {
+    $conn = get_db_connection();
+    $sql = "SELECT * from users where user_id = ?";
+    $query = $conn->prepare($sql);
+    $query->execute(array($user_id));
 
+    $result = $query->fetch(PDO::FETCH_OBJ);
+    return $result;
+  }
+
+  public function set_id($id) {
+    $this->id = $id;
+  }
+  
   public function set_fname($fn) {
     $this->fname = $fn;
   }
@@ -83,6 +102,10 @@ class User {
   
   public function set_lname($ln) {
     $this->lname = $ln;
+  }
+  
+  public function get_id() {
+    return $this->id;
   }
   
   public function get_lname() {
@@ -113,6 +136,13 @@ class User {
     return $this->title;
   }
   
-  
+  public function init_from_db_object($obj) {
+    $this->set_id($obj->user_id);
+    $this->set_title($obj->title);
+    $this->set_fname($obj->fname);
+    $this->set_lname($obj->lname);
+    $this->set_email($obj->email);
+    $this->set_passwd($obj->passwd);
+  }
 
 }

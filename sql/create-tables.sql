@@ -37,6 +37,7 @@ create table orders
 (
     order_id        serial          not null,
     user_id         serial          not null,
+    user_name       varchar(64)     not null,
     flight_no       varchar(10)     not null,
     flight_date     date            not null,
     flight_seat     varchar(10)             ,

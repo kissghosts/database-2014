@@ -80,13 +80,13 @@
         <?php } ?>
 
         <br>
-        <form action="checkout.html">
-          <div class="col-xs-3 pull-right">
+        <div class="col-xs-3 pull-right">
+          <a href="<?php echo $path; ?>checkout.php">
             <button type="button" class="btn btn-primary btn-block">
               Checkout
             </button>
-          </div>
-        </form>
+          </a>
+        </div>
 
         <div class="col-xs-3 pull-right">
           <a href="<?php echo $path; ?>index.php">

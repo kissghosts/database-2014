@@ -222,6 +222,8 @@ class Product {
     
     if ($this->name == '') {
       $this->errors['name'] = "Name should not be blank.";
+    } elseif (strlen($this->name) >= 126) {
+      $this->errors['name'] = "Name is too long.";
     } else { 
       unset($this->errors['name']);
     }
@@ -240,6 +242,8 @@ class Product {
     
     if ($this->category == '') {
       $this->errors['category'] = "Category should not be blank.";
+    } elseif (strlen($this->category) >= 62) {
+      $this->errors['category'] = "Category is too long.";
     } else { 
       unset($this->errors['category']);
     }
@@ -254,6 +258,8 @@ class Product {
     
     if ($this->brand == '') {
       $this->errors['brand'] = "Brand should not be blank.";
+    } elseif (strlen($this->brand) >= 126) {
+      $this->errors['brand'] = "Brand is too long.";
     } else { 
       unset($this->errors['brand']);
     }
