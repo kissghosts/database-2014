@@ -98,3 +98,22 @@ function delete_confirm(form) {
 }
 
 
+// restrict input only to number
+$('#quantity').keypress(function(e) {
+    var a = [];
+    var k = e.which;
+    
+    a.push(8);
+    for (i = 48; i < 58; i++)
+        a.push(i);
+    
+    if (!(a.indexOf(k)>=0))
+        e.preventDefault();
+});
+
+// submit form when selector changes
+$(function() {
+    $('select').change(function() {
+        this.form.submit();
+    });
+});

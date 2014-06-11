@@ -69,12 +69,18 @@
             <tbody>
               <tr>
                 <td>AngryBirds Luke Skywalker Bird Plush Toy</td>
-                <td><div class="col-xs-4">
-                  <input type="text" class="form-control input-sm" value="1"></div>
-                </td>
+                <form method="post" action="something" accept-charset="UTF-8">
+                  <td><div class="col-xs-4">
+                    <input type="text" pattern="\d+" class="form-control input-sm" value="1">
+                    <br>
+                    <button type="submit" class="btn btn-success btn-block">
+                      update
+                    </button>
+                  </div></td>
+                </form>
                 <td><div class="col-xs-2">
                   <button type="button" class="btn btn-link btn-xs">
-                    <span class="glyphicon glyphicon-trash"> </span>
+                    <span class="glyphicon glyphicon-trash"></span>
                   </button></div>
                 </td>
               </tr>
@@ -108,17 +114,16 @@
           </div>
         </div>
 
-        </div>
+      </div>
 
 
-      </div> <!-- row -->
     </div> <!-- container -->
 
     
 
 
 
-  <!-- Bootstrap core JavaScript
+    <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="http://code.jquery.com/jquery-latest.js"></script>

@@ -9,6 +9,8 @@
 
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
         <h1>Current Shopping Cart</h1>
+        <?php if (count($cart_items) > 0) { ?>
+        
         <table class="table table-striped">
           <thead>
             <tr>
@@ -22,18 +24,34 @@
           <tbody>
             <?php for ($i = 0; $i < count($cart_items); $i++) { ?>
 
-            <tr>
+            <tr> <!-- each item -->
               <td style="vertical-align: middle"><img src="<?php echo $products[$i]->get_image_info(); ?>" width="90" class="img-responsive" alt="Product image"></td>
               <td style="vertical-align: middle"><?php echo $products[$i]->get_name();?></td>
+              
               <td style="vertical-align: middle">
-                <div class="col-xs-4">
-                  <input type="text" class="form-control input-sm" value="<?php echo $cart_items[$i]->get_quantity();?>">
-                </div>
+                <form method="post" action="<?php echo $path; ?>shopping_cart.php" accept-charset="UTF-8" class="form-horizontal" role="form">  
+                  <div class="col-xs-4">
+                    <input type="hidden" name="type" value="update">
+                    <input type="hidden" name="itemid" id="itemid" value="<?php echo $cart_items[$i]->get_item_id(); ?>">
+                    <select name="quantity" id="quantity_<?php echo $cart_items[$i]->get_item_id();?>">
+                      <?php for ($j = 1; $j <= 10; $j++) {?>
+                        <option value="<?php echo $j; ?>" <?php if ($j == (int)$cart_items[$i]->get_quantity()) {echo ' selected';}?>><?php echo $j; ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </form>
               </td>
-              <td style="vertical-align: middle"><div class="col-xs-2">
-                <button type="button" class="btn btn-link btn-xs">
-                  <span class="glyphicon glyphicon-trash"></span>
-                </button></div>
+                  
+              <td style="vertical-align: middle">
+                <div class="col-xs-2">
+                  <form method="post" action="<?php echo $path; ?>shopping_cart.php" accept-charset="UTF-8" class="form-horizontal" role="form">
+                    <input type="hidden" name="type" value="delete">
+                    <input type="hidden" name="itemid" id="itemid" value="<?php echo $cart_items[$i]->get_item_id(); ?>">
+                    <button type="submit" class="btn btn-link btn-xs">
+                      <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                  </form>
+                 </div>
               </td>
             </tr>
 
@@ -64,7 +82,7 @@
         <br>
         <form action="checkout.html">
           <div class="col-xs-3 pull-right">
-            <button type="submit" class="btn btn-primary btn-block">
+            <button type="button" class="btn btn-primary btn-block">
               Checkout
             </button>
           </div>
@@ -77,7 +95,12 @@
             </button>
           </a>
         </div>
-      </div>
+        <?php } else { ?>
+        <br>
+        <h4>Your shopping cart is empty now!</h4>
+        <?php } ?>
+        
+      </div> <!-- main body -->
 
     </div>
   </div> <!-- container -->

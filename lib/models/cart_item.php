@@ -57,11 +57,41 @@ class CartItem {
   }
   
   public static function get_item_by_itemid($item_id) {
-    
+    // pass
+  }
+  
+  /*
+   * delete item
+   * input: item_id
+   * return true or false
+   */
+  public static function delete_item_by_id($item_id) {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "DELETE FROM cart_items WHERE cart_item_id = ?";
+    $query = $conn->prepare($sql);
+    $r = $query->execute(array($item_id));
+
+    return $r;
+  }
+  
+  /*
+   * update quantity
+   * input: item_id
+   * return true or false
+   */
+  public static function update_quantity_by_id($item_id, $quantity) {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "UPDATE cart_items SET quantity = ? WHERE cart_item_id = ?";
+    $query = $conn->prepare($sql);
+    $r = $query->execute(array($quantity, $item_id));
+
+    return $r;
   }
   
   public static function add_item_to_db($user_id, $product_id) {
-    
+    // pass
   }
   
   /*
@@ -141,10 +171,6 @@ class CartItem {
     $this->set_quantity($obj->quantity);
   }
   
-  public function update_in_db() {
-    
-  }
-  
   /*
    * updata item quantity in db
    * 
@@ -153,7 +179,7 @@ class CartItem {
     // connect to db
     $conn = get_db_connection();
     $sql = "UPDATE cart_items SET quantity = ? WHERE cart_item_id = ?";
-
+    
     $query = $conn->prepare($sql);
     $result = $query->execute(array($this->quantity, $this->item_id));
     return $result;

@@ -10,7 +10,7 @@
     <h4><span class="text-muted">€<?php echo $product->get_price(); ?></span><h4>
     <br>
     <?php if (isset($_SESSION['valid_user'])) { ?>
-      <div class="btn-group">
+      <div class="btn-group col-xs-3">
         <form method="post" action="<?php echo $path; ?>shopping_cart.php" accept-charset="UTF-8" class="form-horizontal" role="form">
           <input type="hidden" name="type" value="add">
           <input type="hidden" name="productid" id="productid" value="<?php echo $product->get_id(); ?>">
