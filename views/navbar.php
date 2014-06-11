@@ -28,7 +28,7 @@
             <li><a href="#">Orders</a></li>
           </ul>
         </li>
-        <li><a href="#">Shopping Cart </a></li>
+        <li><a href="<?php echo "$path"; ?>shopping_cart.php">Shopping Cart</a></li>
         <li><a href="<?php echo "$path"; ?>logout.php">Log Out</a></li>
       <?php } else { ?>
         <li class="dropdown">

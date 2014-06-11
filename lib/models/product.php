@@ -302,6 +302,23 @@ class Product {
     $this->description = trim($des);
   }
   
+  /*
+   * init all attributes at one time
+   * mainly used with the object returned from PDO fetch
+   */
+  public function init_from_fetched_object($obj) {
+    $this->id = $obj->product_id;
+    $this->name = $obj->name;
+    $this->category = $obj->category;
+    $this->brand = $obj->brand;
+    $this->price = $obj->price;
+    $this->img = $obj->imgurl;
+    $this->description = $obj->description;
+  }
+  
+  
+  
+  
   public function contains_error_attribute() {
     return !empty($this->errors);
   }

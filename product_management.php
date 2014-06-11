@@ -86,7 +86,7 @@
           exit;
         } else {
           $msg = 'If you are not redirected to the home page, please click '
-                  . '<a href="views/home.php">here</a>.';
+                  . '<a href="index.php">here</a>.';
           $title = 'Product adding successful';
           redirect_page($path, 'index.php', '4', $msg, $title);
           exit;
@@ -103,7 +103,7 @@
 
         if ($product->update_in_db()) {
           $msg = 'If you are not redirected to the home page, please click '
-                  . '<a href="views/home.php">here</a>.';
+                  . '<a href="index.php">here</a>.';
           redirect_page($path, 'index.php', '4', $msg, 'Product editing successful');
           exit;
         } else {
@@ -123,7 +123,7 @@
         
         if (Product::delete_product_by_id($id)) {
           $msg = 'If you are not redirected to the home page, please click '
-                  . '<a href="views/home.php">here</a>.';
+                  . '<a href="index.php">here</a>.';
           redirect_page($path, 'index.php', '4', $msg, 'Deleting successful');
           exit;
         } else {

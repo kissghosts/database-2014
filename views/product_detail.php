@@ -11,8 +11,11 @@
     <br>
     <?php if (isset($_SESSION['valid_user'])) { ?>
       <div class="btn-group">
-        <button type="button" class="btn btn-primary">Add to Cart
-        </button>
+        <form method="post" action="<?php echo $path; ?>shopping_cart.php" accept-charset="UTF-8" class="form-horizontal" role="form">
+          <input type="hidden" name="type" value="add">
+          <input type="hidden" name="productid" id="productid" value="<?php echo $product->get_id(); ?>">
+          <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+        </form>
       </div>
       <br>
     <?php } ?>
