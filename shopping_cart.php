@@ -29,17 +29,17 @@
         $cart_item = new CartItem();
         
         $item = CartItem::get_item_by_userid_and_productid($user_id, $product_id);
-        if ($item) {
+        if ($item) { // same item exits in db, update its quantity by adding 1
           $cart_item->set_item_id($item->cart_item_id);
           $cart_item->set_quantity(((int)$item->quantity) + 1);
           $result = $cart_item->update_quantity_in_db();
-          if (!$result) {
+          if (!$result) { // failed
             $msg = 'Fail to perform adding operation.';
             redirect_page($path, 'product_info.php?id=' . $product_id, '4', $msg, 'Adding failed');
             exit;
           }
           
-        } else {
+        } else { // add new item in db
           $cart_item->set_user_id($user_id);
           $cart_item->set_product_id($product_id);
           $cart_item->set_quantity(1);
@@ -54,7 +54,7 @@
         $msg = 'Redirect to homepage :)';
         redirect_page($path, 'index.php', '3', $msg, 'Adding successfully');
         
-      } elseif (isset($_POST['type']) && $_POST['type'] == 'delete') {
+      } elseif (isset($_POST['type']) && $_POST['type'] == 'delete') { // delete item
         if (!isset($_POST['itemid'])) {
           $msg = 'Missing item id to perform this operation!';
           redirect_page($path, 'shopping_cart.php', '4', $msg, 'Illegal Request!');
@@ -64,13 +64,13 @@
         $item_id = $_POST['itemid'];
         if (CartItem::delete_item_by_id($item_id)) {
           header('Location: shopping_cart.php');
-        } else {
+        } else { // failed to delete
           $msg = 'Can not delete item right now!';
           redirect_page($path, 'shopping_cart.php', '4', $msg, 'Deleting Failed!');
           exit;
         }
         
-      } elseif (isset($_POST['type']) && $_POST['type'] == 'update') {
+      } elseif (isset($_POST['type']) && $_POST['type'] == 'update') { // change quantity
         if (!isset($_POST['itemid']) || !isset($_POST['quantity'])) {
           $msg = 'Missing item id to perform this operation!';
           redirect_page($path, 'shopping_cart.php', '4', $msg, 'Illegal Request!');
@@ -96,9 +96,11 @@
           }
         }
         
+        // for pagination
         $item_total_num = CartItem::get_item_num_by_userid($user_id);
         $total_page_num = ceil($item_total_num/$limit);
 
+        // store cart_item and product into two array 
         foreach(CartItem::get_items_by_userid($user_id, $limit, $offset) as $i) {
           $item = new CartItem();
           $item->init_from_db_object($i);
@@ -128,7 +130,7 @@
       redirect_page($path, 'index.php', '4', $msg, 'Operation failed');
     }
 
-  } else {
+  } else { // not login
     $msg = 'You can not perform this operation, please first '
            . '<a href="login.php">sign in</a>.';
     redirect_page($path, 'login.php', '4', $msg, 'Operation failed');
