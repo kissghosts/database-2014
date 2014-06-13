@@ -142,11 +142,20 @@ class Order {
     
     if ($this->flight_date == '') {
       $this->errors['flight_date'] = "You mush give a legal flight date";
-    } elseif (preg_match('/\d{4}-\d{2}-\d{2}$/', $this->flight_date) != 1) {
+    } elseif (preg_match('/^(\d{4}-\d{2}-\d{2})$/', $this->flight_date) != 1) {
       $this->errors['flight_date'] = "Unexpected data format, "
                                     . "should be like this yyyy-mm-dd";
     } else { 
-      unset($this->errors['flight_date']);
+      $today = date('Y-m-d');
+      $cur_date = strtotime($today);
+      $input_date = strtotime($this->flight_date);
+      
+      if ($cur_date > $input_date) {
+        $this->errors['flight_date'] = "Please choose a flight date from tomorrow";
+        
+      } else {
+        unset($this->errors['flight_date']);
+      }
     }
   }
   
@@ -176,7 +185,7 @@ class Order {
     
     if ($this->booking_date == '') {
       $this->errors['booking_date'] = "booking date should not be bland";
-    } elseif (preg_match('/\d{4}-\d{2}-\d{2}$/', $this->booking_date) != 1) {
+    } elseif (preg_match('/^(\d{4}-\d{2}-\d{2})$/', $this->booking_date) != 1) {
       $this->errors['booking_date'] = "Unexpected data format, "
                                     . "should be like this yyyy-mm-dd";
     } else { 
@@ -219,4 +228,34 @@ class Order {
   public function get_error_array() {
     return $this->errors;
   }
+  
+  
+  /*
+   * add new order into db
+   * return order_id (empty if failed)
+   */
+  public function insert_to_db() {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "INSERT INTO orders "
+            . "(user_id, user_name, flight_no, flight_date, flight_seat, "
+            . "booking_date, status, requirement) VALUES "
+            . "(?, ?, ?, CAST(? AS DATE), ?, CAST(? AS DATE), ?, ?) "
+            . "RETURNING order_id";
+    $query = $conn->prepare($sql);
+    
+    if ($this->flight_seat = '') {
+      $this->flight_seat = 'NULL';
+    }
+    
+    $date = date('Y-m-d');
+    $id = $query->execute(array($this->user_id, $this->user_name, 
+                                $this->flight_no, $this->flight_date, 
+                                $this->flight_seat, $date, 
+                                'processing', $this->requirement));
+
+    return $id;
+  }
+  
+  
 }
