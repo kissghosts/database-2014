@@ -61,6 +61,21 @@ class OrderItem {
   }
   
   /*
+   * delete item by order id
+   * input: order_id
+   * return true or false
+   */
+  public static function delete_items_by_orderid($order_id) {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "DELETE FROM order_items WHERE order_id = ?";
+    $query = $conn->prepare($sql);
+    $r = $query->execute(array($order_id));
+
+    return $r;
+  }
+  
+  /*
    * update quantity
    * input: item_id
    * return true or false
@@ -77,7 +92,7 @@ class OrderItem {
   
   /*
    * add new item into db
-   * return cart_item_id (empty if failed)
+   * return cart_item_id (false if failed)
    */
   public static function add_item_to_db($order_id, $product_id, $quantity) {
     // connect to db
@@ -85,9 +100,12 @@ class OrderItem {
     $sql = "INSERT INTO order_items (order_id, product_id, quantity) VALUES "
             . "(?, ?, ?) RETURNING order_item_id";
     $query = $conn->prepare($sql);
-    $id = $query->execute(array($order_id, $product_id, $quantity));
+    $result = $query->execute(array($order_id, $product_id, $quantity));
 
-    return $id;
+    if ($result) {
+      return $query->fetchColumn();
+    }
+    return $result;
     
   }
   
@@ -149,8 +167,8 @@ class OrderItem {
     $this->product_id = $pid;
   }
   
-  public function set_order_id($uid) {
-    $this->order_id = $uid;
+  public function set_order_id($order_id) {
+    $this->order_id = $order_id;
   }
   
   public function set_quantity($quantity) {
@@ -190,7 +208,7 @@ class OrderItem {
   
   /*
    * add new item into db
-   * return cart_item_id (empty if failed)
+   * return true or false
    */
   public function insert_to_db() {
     // connect to db
@@ -198,8 +216,11 @@ class OrderItem {
     $sql = "INSERT INTO order_items (order_id, product_id, quantity) VALUES "
             . "(?, ?, ?) RETURNING order_item_id";
     $query = $conn->prepare($sql);
-    $id = $query->execute(array($this->order_id, $this->product_id, $this->quantity));
+    $result = $query->execute(array($this->order_id, $this->product_id, $this->quantity));
 
-    return $id;
+    if ($result) {
+      $this->item_id = $query->fetchColumn();
+    }
+    return $result;
   }
 }

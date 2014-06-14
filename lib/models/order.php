@@ -166,9 +166,7 @@ class Order {
   public function set_flight_seat($flight_seat) {
     $this->flight_seat = trim($flight_seat);
     
-    if ($this->flight_seat == '') {
-      $this->flight_seat = 'NULL';
-    } elseif (strlen($this->flight_seat) >= 9) {
+    if (strlen($this->flight_seat) >= 9) {
       $this->errors['flight_seat'] = "flight seat could at most contain 9 characters.";
     } else { 
       unset($this->errors['flight_seat']);
@@ -244,7 +242,7 @@ class Order {
   
   /*
    * add new order into db
-   * return order_id (empty if failed)
+   * return true or false
    */
   public function insert_to_db() {
     // connect to db
@@ -257,12 +255,15 @@ class Order {
     $query = $conn->prepare($sql);
     
     $date = date('Y-m-d');
-    $id = $query->execute(array($this->user_id, $this->user_name, 
+    $result = $query->execute(array($this->user_id, $this->user_name, 
                                 $this->flight_no, $this->flight_date, 
                                 $this->flight_seat, $date, 
                                 'processing', $this->requirement));
 
-    return $id;
+    if ($result) {
+      $this->order_id = $query->fetchColumn();
+    }
+    return $result;
   }
   
   

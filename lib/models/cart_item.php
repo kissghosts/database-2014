@@ -207,7 +207,7 @@ class CartItem {
   
   /*
    * add new item into db
-   * return cart_item_id (empty if failed)
+   * return true or false
    */
   public function insert_to_db() {
     // connect to db
@@ -215,8 +215,11 @@ class CartItem {
     $sql = "INSERT INTO cart_items (user_id, product_id, quantity) VALUES "
             . "(?, ?, ?) RETURNING cart_item_id";
     $query = $conn->prepare($sql);
-    $id = $query->execute(array($this->user_id, $this->product_id, $this->quantity));
+    $result = $query->execute(array($this->user_id, $this->product_id, $this->quantity));
 
-    return $id;
+    if ($result) {
+      $this->item_id = $query->fetchColumn();
+    }
+    return $result;
   }
 }

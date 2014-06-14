@@ -17,7 +17,7 @@ class User {
   
   /*
    * register new person with db
-   * return true or error message
+   * return user_id
    */
   public static function register_user_in_db($email, $passwd, $fname, $lname, $title) {
     // connect to db
@@ -26,16 +26,16 @@ class User {
           . "(:title,:fname,:lname,:email,:passwd) "
           . "RETURNING user_id";
     $query = $conn->prepare($sql);
-    $id = $query->execute(array(':title'=>$title,
+    $result = $query->execute(array(':title'=>$title,
                                     ':fname'=>$fname,
                                     ':lname'=>$lname,
                                     ':email'=>$email,
                                     ':passwd'=>$passwd));
 
-    if (!$id) {
+    if (!$result) {
       throw new Exception('Could not register, please try it later');
     }
-    return $id;
+    return $query->fetchColumn();
   }
   
   /*

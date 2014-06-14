@@ -55,7 +55,9 @@
             <div class="form-group row">                
               <label class="col-sm-2 control-label" for="textinput">Seat Number</label>
               <div class="col-sm-4">
-                <input type="text" name="flightseat" placeholder="If you don't have your seat number yet, just leave this empty" class="form-control" value="<?php if (isset($order) && $order->get_flight_seat() != 'NULL') {echo $order->get_flight_seat();}?>">
+                <input type="text" name="flightseat" placeholder="Seat Number" class="form-control" value="<?php if (isset($order) && $order->get_flight_seat() != 'NULL') {echo $order->get_flight_seat();}?>">
+                <br>
+                <div class="alert alert-info">If you don't have your seat number yet, just leave this empty</div>
               </div>
             </div>
 

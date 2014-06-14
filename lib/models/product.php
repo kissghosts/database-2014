@@ -59,20 +59,16 @@ class Product {
     $conn = get_db_connection();
     $sql = "INSERT INTO products "
             . "(name, category, brand, price, imgurl, description) VALUES "
-            . "(:name,:category,:brand,:price,:imgurl,:description) "
-            . "RETURNING id";
+            . "(:name,:category,:brand,:price,:imgurl,:description)";
     $query = $conn->prepare($sql);
-    $id = $query->execute(array(':name'=>$name,
+    $result = $query->execute(array(':name'=>$name,
                                     ':category'=>$category,
                                     ':brand'=>$brand,
                                     ':price'=>$price,
                                     ':imgurl'=>$img,
                                     ':description'=>$des));
 
-    if (!$id) {
-      return false;
-    }
-    return true;
+    return $result;
   }
   
   /*
@@ -335,7 +331,7 @@ class Product {
   
   /*
    * add new product into db
-   * return product_id (empty if failed)
+   * return true or false
    */
   public function insert_to_db() {
     // connect to db
@@ -345,14 +341,17 @@ class Product {
             . "(:name,:category,:brand,:price,:imgurl,:description) "
             . "RETURNING product_id";
     $query = $conn->prepare($sql);
-    $id = $query->execute(array(':name'=>  $this->name,
+    $result = $query->execute(array(':name'=>  $this->name,
                                 ':category'=>  $this->category,
                                 ':brand'=>  $this->brand,
                                 ':price'=>  $this->price,
                                 ':imgurl'=>  $this->img,
                                 ':description'=>  $this->description));
 
-    return $id;
+    if ($result) {
+      $this->id = $query->fetchColumn();
+    }
+    return $result;
   }
   
   /*

@@ -4,6 +4,7 @@
   require_once 'lib/models/user.php';
   require_once 'lib/models/order.php';
   require_once 'lib/models/cart_item.php';
+  require_once 'lib/models/order_item.php';
   
   // used for input checking
   function form_prechecking($path, $user_id, $user_name, $flight_no, 
@@ -50,19 +51,22 @@
                             $flight_date, $flight_seat, $requirement);
 
         // make order in db
-        $order_id = $order->insert_to_db();
-        if (!$order_id) {
+        $result = $order->insert_to_db();
+        if (!$result) {
           require 'views/html_header.php';
           require 'views/navbar.php';
           require 'views/order_form.php';
           require 'views/html_footer.php';
           exit;
         }
-
+        $order_id = $order->get_orderid();
+        echo $order_id;
+        
         // move item from table cart_items to order_items
         foreach (CartItem::get_all_items_by_userid($user_id) as $c_item) {
           $item = new OrderItem();
           $item->init_attributes($order_id, $c_item->product_id, $c_item->quantity);
+          
           $result = $item->insert_to_db();
           if (!$result) {
             $msg = 'Can not init order_item in database';
@@ -101,6 +105,14 @@
         if ($order_obj->status != 'processing') {
           $msg = 'Confirmed order could not be deleted.';
           redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        
+        // delete order_item first
+        $result = OrderItem::delete_items_by_orderid($order_id);
+        if (!$result) {
+          $msg = 'Can not delete order items in table order_items';
+          redirect_page($path, 'orders.php', '4', $msg, 'Operation failed');
           exit;
         }
         
