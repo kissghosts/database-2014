@@ -122,7 +122,7 @@ class Order {
   }
   
   public function set_flight_no($flight_no) {
-    $this->flight_no = trim($flight_no);
+    $this->flight_no = strtoupper(trim($flight_no));
     
     if ($this->flight_no == '') {
       $this->errors['flight_no'] = "flight_no should not be blank.";
@@ -221,6 +221,18 @@ class Order {
     $this->requirement = trim($requirement);
   }
   
+  public function init_from_db_object($obj) {
+    $this->set_orderid($obj->order_id);
+    $this->set_userid($obj->user_id);
+    $this->set_user_name($obj->user_name);
+    $this->set_flight_no($obj->flight_no);
+    $this->set_flight_date($obj->flight_date);
+    $this->set_flight_seat($obj->flight_seat);
+    $this->set_booking_date($obj->booking_date);
+    $this->set_status($obj->status);
+    $this->set_requirement($obj->requirement);
+  }
+  
   public function contains_error_attribute() {
     return !empty($this->errors);
   }
@@ -243,10 +255,6 @@ class Order {
             . "(?, ?, ?, CAST(? AS DATE), ?, CAST(? AS DATE), ?, ?) "
             . "RETURNING order_id";
     $query = $conn->prepare($sql);
-    
-    if ($this->flight_seat = '') {
-      $this->flight_seat = 'NULL';
-    }
     
     $date = date('Y-m-d');
     $id = $query->execute(array($this->user_id, $this->user_name, 

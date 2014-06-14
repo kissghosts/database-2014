@@ -20,7 +20,7 @@
         
         <h1>Order Details</h1>
 
-        <form class="form-horizontal" role="form" method="post" action="<?php echo $path; ?>order.php" accept-charset="UTF-8">
+        <form class="form-horizontal" role="form" method="post" action="<?php echo $path; ?>orders.php" accept-charset="UTF-8">
           <fieldset>
 
             <!-- Form Name -->

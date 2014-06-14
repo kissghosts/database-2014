@@ -112,6 +112,22 @@ class CartItem {
   }
   
   /*
+   * get all cart item objects for a specified user
+   * input: $user_id
+   * return cart_item object array (fetchAll(PDO::FETCH_OBJ))
+   */
+  public static function get_all_items_by_userid($user_id) {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "SELECT * FROM cart_items WHERE user_id = ? ";
+    $query = $conn->prepare($sql);
+    $query->execute(array($user_id));
+
+    $rows = $query->fetchAll(PDO::FETCH_OBJ);
+    return $rows;
+  }
+  
+  /*
    * get row number of items for a specified user
    * return row number
    */
@@ -176,6 +192,10 @@ class CartItem {
    * 
    */
   public function update_quantity_in_db() {
+    if (!isset($this->item_id)) {
+      return FALSE;
+    }
+
     // connect to db
     $conn = get_db_connection();
     $sql = "UPDATE cart_items SET quantity = ? WHERE cart_item_id = ?";

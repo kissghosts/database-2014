@@ -25,7 +25,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="#">User Info</a></li>
-              <li><a href="#">Orders</a></li>
+              <li><a href="<?php echo $path; ?>orders.php">Orders</a></li>
             </ul>
           </li>
           <li><a href="<?php echo "$path"; ?>shopping_cart.php">Shopping Cart</a></li>
@@ -57,7 +57,7 @@
 
         </ul>
         <form class="navbar-form navbar-right" method="post" action="<?php echo "$path"; ?>index.php" accept-charset="UTF-8">
-          <input type="text" id="search" name="search" class="form-control" placeholder="Search...">
+          <input type="text" id="search" name="search" class="form-control" placeholder="Search products...">
         </form>
       </div>
     </div>

@@ -33,7 +33,7 @@
 
     if (isset($_GET['page'])) {
       $page = (int)$_GET['page'];
-      $current_page = page;
+      $current_page = $page;
       if ($page >= 1) {
         $offset = $page * $limit; 
       }
