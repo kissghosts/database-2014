@@ -3,6 +3,7 @@
   require_once 'lib/view_components.php';
   require_once 'lib/models/user.php';
   require_once 'lib/models/order.php';
+  require_once 'lib/models/product.php';
   require_once 'lib/models/cart_item.php';
   require_once 'lib/models/order_item.php';
   
@@ -86,6 +87,7 @@
       } elseif (isset($_POST['type']) && $_POST['type'] == 'cancel') {
         
         header('Location: index.php');
+        exit;
       
       } elseif (isset($_POST['type']) && $_POST['type'] == 'delete') {
         // delete one order
@@ -123,6 +125,50 @@
           exit;
         }
         header('Location: orders.php');
+        exit;
+        
+      } elseif (isset($_POST['type']) && $_POST['type'] == 'view') {
+        // view details or edit
+        if (!isset($_POST['orderid'])) {
+          $msg = 'Missing order id to continue operation.';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        $order_id = $_POST['orderid'];
+        
+        $order_obj = Order::get_order_by_orderid($order_id);
+        if (!$order_obj) {
+          $msg = 'On corresponding order found.';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        $order = new Order();
+        $order->init_from_db_object($order_obj);
+        $order_items = array();
+        $products = array();
+        
+        // store order_item and product into two array
+        foreach (OrderItem::get_all_items_by_orderid($order_id) as $obj) {
+          $order_item = new OrderItem();
+          $order_item->init_from_db_object($obj);
+          $order_items[] = $order_item;
+          
+          $product = new Product();
+          $p = Product::get_product_by_id($order_item->get_product_id());
+          if (!$p) {
+            $msg = 'Unknown product found.';
+            redirect_page($path, 'orders.php', '4', $msg, 'Unknown error!!!');
+            exit;
+          }
+          $product->init_from_fetched_object($p);
+          $products[] = $product;
+        }
+        
+        require 'views/html_header.php';
+        require 'views/navbar.php';
+        require 'views/order_detail.php';
+        require 'views/html_footer.php';
+        exit;
       }
       
       

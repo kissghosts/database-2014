@@ -127,6 +127,23 @@ class OrderItem {
   }
   
   /*
+   * get all item objects
+   * input: $order_id
+   * return item object array (fetchAll(PDO::FETCH_OBJ))
+   */
+  public static function get_all_items_by_orderid($order_id) {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "SELECT * FROM order_items WHERE order_id = ? "
+            . "ORDER BY order_item_id DESC";
+    $query = $conn->prepare($sql);
+    $query->execute(array($order_id));
+
+    $rows = $query->fetchAll(PDO::FETCH_OBJ);
+    return $rows;
+  }
+  
+  /*
    * get row number of items for a specified user
    * return row number
    */

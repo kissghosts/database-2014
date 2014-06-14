@@ -31,23 +31,39 @@
               <td><?php echo $order->get_booking_date(); ?></td>
               <td><?php echo $order->get_flight_no(); ?></td>
               <td><?php echo $order->get_flight_date(); ?></td>
-              <td><span class="label label-warning"><?php echo $order->get_status(); ?></span>
-              <td><a class='btn btn-primary btn-xs' href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
+              <td><span class="label label-<?php if ($order->get_status() == 'processing') {
+                echo 'warning';
+              } else {
+                echo 'success';
+              } ?>"><?php echo $order->get_status(); ?></span>
               
+              <!-- view/edit -->
+              <td>
+                <div>
+                  <form method="post" action="<?php echo $path; ?>orders.php" accept-charset="UTF-8" class="form-horizontal" role="form">
+                    <input type="hidden" name="type" value="view">
+                    <input type="hidden" name="orderid" id="orderid_<?php $order->get_orderid(); ?>" value="<?php echo $order->get_orderid(); ?>">
+                    <button type="submit" class="btn btn-primary btn-xs">
+                      <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                  </form>
+                </div>
+              </td>
+               
               <!-- delete -->
               <td>
                 <?php if ($order->get_status() == 'processing') { ?>
                 <div>
                   <form method="post" action="<?php echo $path; ?>orders.php" accept-charset="UTF-8" class="form-horizontal" role="form">
                     <input type="hidden" name="type" value="delete">
-                    <input type="hidden" name="orderid" id="orderid" value="<?php echo $order->get_orderid(); ?>">
+                    <input type="hidden" name="orderid" id="orderid_<?php $order->get_orderid(); ?>" value="<?php echo $order->get_orderid(); ?>">
                     <button type="button" class="btn btn-danger btn-xs" onclick="delete_confirm(this.form);">
                       <span class="glyphicon glyphicon-trash"></span>
                     </button>
                   </form>
                 </div>
                 <?php } else { ?>
-                  <td><span class="glyphicon glyphicon-trash"></span></td>
+                  <span class="glyphicon glyphicon-trash"></span>
                 <?php } ?> 
               </td>
             </tr>
