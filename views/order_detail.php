@@ -25,7 +25,7 @@
               <td style="vertical-align: middle"><?php echo $products[$i]->get_name();?></td>
 
               <td style="vertical-align: middle">
-                <?php if ($order->get_status() != 'processing') {
+                <?php if ($order->get_status() != 'processing' || !isset($_SESSION['valid_user'])) {
                   echo $order_items[$i]->get_quantity();
                 } else { ?>
                 <form method="post" action="<?php echo $path; ?>orders.php" accept-charset="UTF-8" class="form-horizontal" role="form">  
@@ -93,12 +93,20 @@
         </div>
         
         <div>
-          <?php if ($order->get_status() == 'processing') { ?>
+          <?php if ($order->get_status() == 'processing' && isset($_SESSION['valid_user'])) { ?>
           <div class="col-xs-3 pull-right">
             <form method="post" action="<?php echo $path; ?>orders.php" accept-charset="UTF-8" class="form-horizontal" role="form">
               <input type="hidden" name="type" value="edit_form">
               <input type="hidden" name="orderid" value="<?php echo $order->get_orderid(); ?>">
               <button type="submit" class="btn btn-primary btn-block">Edit</button>
+            </form>
+          </div>
+          <?php } elseif ($order->get_status() == 'processing' && isset($_SESSION['staff_user'])) { ?>
+          <div class="col-xs-3 pull-right">
+            <form method="post" action="<?php echo $path; ?>orders.php" accept-charset="UTF-8" class="form-horizontal" role="form">
+              <input type="hidden" name="type" value="confirm">
+              <input type="hidden" name="orderid" value="<?php echo $order->get_orderid(); ?>">
+              <button type="submit" class="btn btn-primary btn-block">Confirm</button>
             </form>
           </div>
           <?php } ?>

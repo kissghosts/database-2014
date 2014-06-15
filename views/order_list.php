@@ -10,7 +10,7 @@
         <h1>Orders</h1>
         
         <?php if (empty($orders)) {
-          echo "<br><h4>You have no order.</h4>";
+          echo "<br><h4>No available order found.</h4>";
         } else { ?>
         
         <table class="table table-striped">

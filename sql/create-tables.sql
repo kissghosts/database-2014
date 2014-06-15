@@ -58,3 +58,13 @@ create table order_items
     CONSTRAINT fk1_order_item FOREIGN KEY (order_id) REFERENCES orders(order_id),
     CONSTRAINT fk2_order_item FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
+
+create table notifications
+{
+    notification_id     serial              not null,
+    user_id             serial              not null,
+    message             text                not null,
+    is_read             boolean             not null,
+    CONSTRAINT pk PRIMARY KEY (notification_id),
+    CONSTRAINT fk FOREIGN KEY (user_id) REFERENCES users(user_id)
+};

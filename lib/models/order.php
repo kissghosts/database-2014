@@ -59,6 +59,34 @@ class Order {
   }
   
   /*
+   * get all of the unconfirmed orders
+   * input: limit, offset
+   * return PDO fetchAll array (style PDO::FETCH_OBJ)
+   */
+  public static function get_unconfirmed_orders($limit, $offset) {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "SELECT * FROM orders WHERE status = ? "
+            . "ORDER BY order_id DESC LIMIT ? OFFSET ?";
+    $query = $conn->prepare($sql);
+    $query->execute(array('processing', $limit, $offset));
+
+    $rows = $query->fetchAll(PDO::FETCH_OBJ);
+    return $rows;
+  }
+  
+  /*
+   * get row number of unconfirmed orders
+   * return row number
+   */
+  public static function get_unconfirmed_order_num() {
+    $sql = "SELECT count(*) FROM orders WHERE status = ?";
+    $query = get_db_connection()->prepare($sql);
+    $query->execute(array($user_id));
+    return $query->fetchColumn();
+  }
+  
+  /*
    * get row number of orders
    * return row number
    */

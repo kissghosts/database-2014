@@ -29,17 +29,145 @@
     
     return $order;
   }
+  
+  // show order list
+  function show_customer_order_list($user_id, $path) {
+    $limit = 10;
+    $offset = 0;
+    $currnt_page = 0;  // start page number is 0 (the first index page)
+    $orders = array();
 
+    if (isset($_GET['page'])) {
+      $page = (int)$_GET['page'];
+      $current_page = $page;
+      if ($page >= 1) {
+        $offset = $page * $limit; 
+      }
+    }
+
+    $order_total_num = Order::get_order_num_by_userid($user_id);
+    $total_page_num = ceil($order_total_num/$limit);
+
+    foreach(Order::get_orders_by_userid($user_id, $limit, $offset) as $o) {
+      $order = new Order();
+      $order->init_from_db_object($o);
+      $orders[] = $order;
+    }
+
+    // html view
+    require 'views/html_header.php';
+    require 'views/navbar.php';
+    require 'views/order_list.php';
+    require 'views/html_footer_with_form_hash.php';
+  }
+  
+  // show all orders for staff
+  function show_order_list($user_id, $path) {
+    $limit = 10;
+    $offset = 0;
+    $currnt_page = 0;  // start page number is 0 (the first index page)
+    $orders = array();
+
+    if (isset($_GET['page'])) {
+      $page = (int)$_GET['page'];
+      $current_page = $page;
+      if ($page >= 1) {
+        $offset = $page * $limit; 
+      }
+    }
+
+    $order_total_num = Order::get_unconfirmed_order_num();
+    $total_page_num = ceil($order_total_num/$limit);
+
+    foreach(Order::get_unconfirmed_orders($limit, $offset) as $o) {
+      $order = new Order();
+      $order->init_from_db_object($o);
+      $orders[] = $order;
+    }
+
+    // html view
+    require 'views/html_header.php';
+    require 'views/navbar.php';
+    require 'views/order_list.php';
+    require 'views/html_footer_with_form_hash.php';
+  }
+  
+  // show order details
+  function show_order_detail($order_id, $path) {
+
+    $order_obj = Order::get_order_by_orderid($order_id);
+    if (!$order_obj) {
+      $msg = 'On corresponding order found.';
+      redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+      exit;
+    }
+    $order = new Order();
+    $order->init_from_db_object($order_obj);
+    $order_items = array();
+    $products = array();
+
+    // store order_item and product into two array
+    foreach (OrderItem::get_all_items_by_orderid($order_id) as $obj) {
+      $order_item = new OrderItem();
+      $order_item->init_from_db_object($obj);
+      $order_items[] = $order_item;
+
+      $product = new Product();
+      $p = Product::get_product_by_id($order_item->get_product_id());
+      if (!$p) {
+        $msg = 'Unknown product found.';
+        redirect_page($path, 'orders.php', '4', $msg, 'Unknown error!!!');
+        exit;
+      }
+      $product->init_from_fetched_object($p);
+      $products[] = $product;
+    }
+
+    require 'views/html_header.php';
+    require 'views/navbar.php';
+    require 'views/order_detail.php';
+    require 'views/html_footer.php';
+  }
+  
+  // delete order
+  function delete_order($order_id, $path) {
+    
+    $order_obj = Order::get_order_by_orderid($order_id);
+    if (!$order_obj) {
+      $msg = 'No corresponding order found.';
+      redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+      exit;
+    }
+
+    // delete order_item first
+    $result = OrderItem::delete_items_by_orderid($order_id);
+    if (!$result) {
+      $msg = 'Can not delete order items in table order_items';
+      redirect_page($path, 'orders.php', '4', $msg, 'Operation failed');
+      exit;
+    }
+
+    $result = Order::delete_order_by_orderid($order_id);
+    if (!$result) {
+      $msg = 'Could not delete the item now';
+      redirect_page($path, 'orders.php', '4', $msg, 'Unknown error');
+      exit;
+    }
+    header('Location: orders.php');
+  }
+  
+  // TODO: now all the logic conditions are put together, which might be 
+  // a bit confusing, and difficult to modify
+  // consider to separate this file later
+  
   // start session
   session_start();
   $path = '';
-  // $cart_items = array();
-  // $order_items = array();
   
-  if (isset($_SESSION['valid_user'])) {
-    $user_id = $_SESSION['valid_user'];
+  try { // in case that any unknown error happens (e.g. db error)
     
-    try { // in case that any unknown error happens (e.g. db error)
+    if (isset($_SESSION['valid_user'])) {
+      $user_id = $_SESSION['valid_user'];
       
       // add new order
       if (isset($_POST['type']) && $_POST['type'] == 'add') {    
@@ -61,7 +189,6 @@
           exit;
         }
         $order_id = $order->get_orderid();
-        echo $order_id;
         
         // move item from table cart_items to order_items
         foreach (CartItem::get_all_items_by_userid($user_id) as $c_item) {
@@ -98,28 +225,7 @@
         }
         $order_id = $_POST['orderid'];
         
-        $order_obj = Order::get_order_by_orderid($order_id);
-        if (!$order_obj) {
-          $msg = 'No corresponding order found.';
-          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
-          exit;
-        }
-        
-        // delete order_item first
-        $result = OrderItem::delete_items_by_orderid($order_id);
-        if (!$result) {
-          $msg = 'Can not delete order items in table order_items';
-          redirect_page($path, 'orders.php', '4', $msg, 'Operation failed');
-          exit;
-        }
-        
-        $result = Order::delete_order_by_orderid($order_id);
-        if (!$result) {
-          $msg = 'Could not delete the item now';
-          redirect_page($path, 'orders.php', '4', $msg, 'Unknown error');
-          exit;
-        }
-        header('Location: orders.php');
+        delete_order($order_id, $path);
         exit;
         
       } elseif (isset($_POST['type']) && $_POST['type'] == 'view') {
@@ -131,39 +237,9 @@
         }
         $order_id = $_POST['orderid'];
         
-        $order_obj = Order::get_order_by_orderid($order_id);
-        if (!$order_obj) {
-          $msg = 'On corresponding order found.';
-          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
-          exit;
-        }
-        $order = new Order();
-        $order->init_from_db_object($order_obj);
-        $order_items = array();
-        $products = array();
-        
-        // store order_item and product into two array
-        foreach (OrderItem::get_all_items_by_orderid($order_id) as $obj) {
-          $order_item = new OrderItem();
-          $order_item->init_from_db_object($obj);
-          $order_items[] = $order_item;
-          
-          $product = new Product();
-          $p = Product::get_product_by_id($order_item->get_product_id());
-          if (!$p) {
-            $msg = 'Unknown product found.';
-            redirect_page($path, 'orders.php', '4', $msg, 'Unknown error!!!');
-            exit;
-          }
-          $product->init_from_fetched_object($p);
-          $products[] = $product;
-        }
-        
-        require 'views/html_header.php';
-        require 'views/navbar.php';
-        require 'views/order_detail.php';
-        require 'views/html_footer.php';
+        show_order_detail($order_id, $path);
         exit;
+        
       } elseif (isset($_POST['type']) && $_POST['type'] == 'update') { 
         if (!isset($_POST['orderid'])) {
           $msg = 'Missing order id to continue operation.';
@@ -189,10 +265,7 @@
         $item_id = $_POST['itemid'];
         $quantity = $_POST['quantity'];
         if (OrderItem::update_quantity_by_itemid($item_id, $quantity)) {
-          require 'views/html_header.php';
-          require 'views/navbar.php';
-          require 'views/order_detail.php';
-          require 'views/html_footer.php';
+          show_order_detail($order_id, $path);
         } else {
           $msg = 'Can not update item quantity right now!';
           redirect_page($path, 'orders.php', '4', $msg, 'Updating Failed!');
@@ -264,56 +337,94 @@
         $order->set_status($obj->status);
         $order->set_orderid($obj->order_id);
         
-        echo $requirement;
+        if (!($order->update_in_db())) {
+          $msg = 'Can not update order info this time';
+          redirect_page($path, 'orders.php', '4', $msg, 'Unknown error!!!');
+          exit;
+        }
+        
+        show_order_detail($order_id, $path);
+        exit;
+      }
+      
+      // show order list
+      show_customer_order_list($user_id, $path);
+      exit;
+      
+    } elseif (isset($_SESSION['staff_user'])) {
+      if (isset($_POST['type']) && $_POST['type'] == 'delete') {
+        // delete one order
+        if (!isset($_POST['orderid'])) {
+          $msg = 'Missing order id to continue operation.';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        $order_id = $_POST['orderid'];
+        
+        delete_order($order_id, $path);
+        exit;
+        
+      } elseif (isset($_POST['type']) && $_POST['type'] == 'view') {
+        // view details or edit
+        if (!isset($_POST['orderid'])) {
+          $msg = 'Missing order id to continue operation.';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        $order_id = $_POST['orderid'];
+        
+        show_order_detail($order_id, $path);
+        exit;
+        
+      } elseif (isset($_POST['type']) && $_POST['type'] == 'confirm') {
+        // delete one order
+        if (!isset($_POST['orderid'])) {
+          $msg = 'Missing order id to continue operation.';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        $order_id = $_POST['orderid'];
+        
+        $obj = Order::get_order_by_orderid($order_id);
+        
+        if (!$obj) {
+          $msg = 'Not found this order id in database';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        if ($obj->status != 'processing') {
+          $msg = 'Confirmed order could not be changed anymore.';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        
+        $order = new Order();
+        $order->init_from_db_object($obj);
+        $order->set_status('confirmed');
         
         if (!($order->update_in_db())) {
           $msg = 'Can not update order info this time';
           redirect_page($path, 'orders.php', '4', $msg, 'Unknown error!!!');
           exit;
         }
+        
       }
       
       // show order list
-      $limit = 10;
-      $offset = 0;
-      $currnt_page = 0;  // start page number is 0 (the first index page)
-      $orders = array();
+      show_order_list($path);
+      exit;
       
-      if (isset($_GET['page'])) {
-        $page = (int)$_GET['page'];
-        $current_page = $page;
-        if ($page >= 1) {
-          $offset = $page * $limit; 
-        }
-      }
-      
-      $order_total_num = Order::get_order_num_by_userid($user_id);
-      $total_page_num = ceil($order_total_num/$limit);
-      
-      foreach(Order::get_orders_by_userid($user_id, $limit, $offset) as $o) {
-        $order = new Order();
-        $order->init_from_db_object($o);
-        $orders[] = $order;
-      }
-      
-      // html view
-      require 'views/html_header.php';
-      require 'views/navbar.php';
-      require 'views/order_list.php';
-      require 'views/html_footer_with_form_hash.php';
-      
-    } catch (Exception $e) {
-      $msg = $e->getMessage();
-      redirect_page($path, 'index.php', '4', $msg, 'Operation failed');
+    } else { // illegal user request
+      $msg = 'You can not perform this operation, redirect to '
+             . '<a href="login.php">sign-in</a> page.';
+      redirect_page($path, 'login.php', '4', $msg, 'Operation failed');
     }
-    
-  } else {
-    $msg = 'You can not perform this operation, redirect to '
-           . '<a href="login.php">sign-in</a> page.';
-    redirect_page($path, 'login.php', '4', $msg, 'Operation failed');
-  }
   
-
+    
+  } catch (Exception $e) {
+    $msg = $e->getMessage();
+    redirect_page($path, 'index.php', '4', $msg, 'Operation failed');
+  }
   
   
 ?>
