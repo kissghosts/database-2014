@@ -62,7 +62,7 @@
   }
   
   // show all orders for staff
-  function show_order_list($user_id, $path) {
+  function show_order_list($path) {
     $limit = 10;
     $offset = 0;
     $currnt_page = 0;  // start page number is 0 (the first index page)

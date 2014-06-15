@@ -82,7 +82,7 @@ class Order {
   public static function get_unconfirmed_order_num() {
     $sql = "SELECT count(*) FROM orders WHERE status = ?";
     $query = get_db_connection()->prepare($sql);
-    $query->execute(array($user_id));
+    $query->execute(array('processing'));
     return $query->fetchColumn();
   }
   
