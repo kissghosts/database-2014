@@ -198,8 +198,8 @@ class Order {
   public function set_status($status) {
     $this->status = trim($status);
     
-    if ($this->status != 'processing' || $this->status != 'confirmed') {
-      $this->errors['status'] = "unsupported status";
+    if ($this->status != 'processing' && $this->status != 'confirmed') {
+      $this->errors['status'] = "unsupported status: " . $this->status;
     } else { 
       unset($this->errors['status']);
     }
@@ -263,6 +263,26 @@ class Order {
     if ($result) {
       $this->order_id = $query->fetchColumn();
     }
+    return $result;
+  }
+  
+  /*
+   * updata order info in db
+   * return true or false
+   */
+  public function update_in_db() {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "UPDATE orders SET user_name = ?, flight_no = ?, "
+            . "flight_date = CAST(? AS DATE), flight_seat = ?, "
+            . "booking_date = CAST(? AS DATE), status = ?, "
+            . "requirement = ? WHERE order_id = ?";
+
+    $query = $conn->prepare($sql);
+    $result = $query->execute(array($this->user_name, $this->flight_no, 
+                                    $this->flight_date, $this->flight_seat, 
+                                    $this->booking_date, $this->status, 
+                                    $this->requirement, $this->order_id));
     return $result;
   }
   

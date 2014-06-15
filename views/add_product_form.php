@@ -20,7 +20,7 @@
 
         <input type="hidden" name="type" value="<?php echo $type; ?>">
         
-        <?php if ($type = 'edit') { ?>
+        <?php if ($type == 'edit') { ?>
           <input type="hidden" name="id" value="<?php echo $product->get_id(); ?>">
         <?php } ?>
 

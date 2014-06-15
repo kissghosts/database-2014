@@ -52,7 +52,6 @@
                
               <!-- delete -->
               <td>
-                <?php if ($order->get_status() == 'processing') { ?>
                 <div>
                   <form method="post" action="<?php echo $path; ?>orders.php" accept-charset="UTF-8" class="form-horizontal" role="form">
                     <input type="hidden" name="type" value="delete">
@@ -61,10 +60,7 @@
                       <span class="glyphicon glyphicon-trash"></span>
                     </button>
                   </form>
-                </div>
-                <?php } else { ?>
-                  <span class="glyphicon glyphicon-trash"></span>
-                <?php } ?> 
+                </div> 
               </td>
             </tr>
             <?php } ?>

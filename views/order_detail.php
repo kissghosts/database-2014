@@ -14,7 +14,6 @@
               <th>Product</th>
               <th>Name</th>
               <th>Quantity</th>
-              <th>Delete</th>
             </tr>
           </thead>
 
@@ -32,6 +31,7 @@
                 <form method="post" action="<?php echo $path; ?>orders.php" accept-charset="UTF-8" class="form-horizontal" role="form">  
                   <div class="col-xs-4">
                     <input type="hidden" name="type" value="update">
+                    <input type="hidden" name="orderid" value="<?php echo $order->get_orderid(); ?>">
                     <input type="hidden" name="itemid" value="<?php echo $order_items[$i]->get_item_id(); ?>">
                     <select name="quantity" id="quantity_<?php echo $order_items[$i]->get_item_id();?>">
                       <?php for ($j = 1; $j <= 10; $j++) {?>
@@ -41,22 +41,6 @@
                   </div>
                 </form>
                 <?php } ?>
-              </td>
-
-              <td style="vertical-align: middle">
-                <?php if ($order->get_status() != 'processing') {
-                  echo 'Can not delete now';
-                } else { ?>
-                <div class="col-xs-2">
-                  <form method="post" action="<?php echo $path; ?>orders.php" accept-charset="UTF-8" class="form-horizontal" role="form">
-                    <input type="hidden" name="type" value="delete">
-                    <input type="hidden" name="itemid" value="<?php echo $order_items[$i]->get_item_id(); ?>">
-                    <button type="submit" class="btn btn-link btn-xs" onclick="delete_confirm(this.form);">
-                      <span class="glyphicon glyphicon-trash"></span>
-                    </button>
-                  </form>
-                </div
-                <?php } ?> 
               </td>
             </tr>
 
@@ -101,7 +85,7 @@
         <h5><strong>Requirement</strong></h5>
         <div class="well">
           <p><?php if ($order->get_requirement() != '') {
-            echo $order->get_get_requirement();
+            echo $order->get_requirement();
           } else {
             echo 'No extra requirement';
           } ?>
@@ -112,8 +96,8 @@
           <?php if ($order->get_status() == 'processing') { ?>
           <div class="col-xs-3 pull-right">
             <form method="post" action="<?php echo $path; ?>orders.php" accept-charset="UTF-8" class="form-horizontal" role="form">
-              <input type="hidden" name="type" value="edit">
-              <input type="hidden" name="itemid" value="<?php echo $order->get_orderid(); ?>">
+              <input type="hidden" name="type" value="edit_form">
+              <input type="hidden" name="orderid" value="<?php echo $order->get_orderid(); ?>">
               <button type="submit" class="btn btn-primary btn-block">Edit</button>
             </form>
           </div>

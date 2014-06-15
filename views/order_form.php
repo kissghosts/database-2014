@@ -2,7 +2,7 @@
     <div class="row-fluid">
       <div class="col-sm-3 col-md-2 sidebar">
         <div class="well nav-sidebar">
-          <h5><span class="glyphicon glyphicon-shopping-cart"></span>Shopping Cart</h5>
+          <h5><span class="glyphicon glyphicon-shopping-cart"></span>Order Info</h5>
         </div>
       </div>
 
@@ -65,16 +65,24 @@
             <div class="form-group">
               <label class="col-sm-2 control-label" for="textinput">Other Requirements</label>
               <div class="col-sm-10">
-                <textarea id="requirements" name="requirement" class="form-control" placeholder="Other requirements, e.g. meal reservation, payment methods"><?php if (isset($order)) {echo $order->get_requirement();}?></textarea>
+                <textarea id="requirement" name="requirement" class="form-control" placeholder="Other requirements, e.g. meal reservation, payment methods"><?php if (isset($order)) {echo $order->get_requirement();}?></textarea>
               </div>
             </div>
             <br>
-
+              
             <div>
               <div class="col-xs-3 pull-right">
-                <button type="submit" name="type" value="add" class="btn btn-primary btn-block">
-                  Submit
-                </button>
+                <!-- only for order update -->
+                <?php if (isset($type) && $type == 'edit') { ?>
+                  <input type="hidden" name="orderid" value="<?php echo $order->get_orderid(); ?>">
+                  <button type="submit" name="type" value="edit" class="btn btn-primary btn-block">
+                    Submit
+                  </button>
+                <?php } else { ?>
+                  <button type="submit" name="type" value="add" class="btn btn-primary btn-block">
+                    Submit
+                  </button>
+                <?php } ?>
               </div>
 
               <div class="col-xs-3 pull-right">

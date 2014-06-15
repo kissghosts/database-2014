@@ -100,12 +100,7 @@
         
         $order_obj = Order::get_order_by_orderid($order_id);
         if (!$order_obj) {
-          $msg = 'On corresponding order found.';
-          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
-          exit;
-        }
-        if ($order_obj->status != 'processing') {
-          $msg = 'Confirmed order could not be deleted.';
+          $msg = 'No corresponding order found.';
           redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
           exit;
         }
@@ -169,9 +164,114 @@
         require 'views/order_detail.php';
         require 'views/html_footer.php';
         exit;
+      } elseif (isset($_POST['type']) && $_POST['type'] == 'update') { 
+        if (!isset($_POST['orderid'])) {
+          $msg = 'Missing order id to continue operation.';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        $order_id = $_POST['orderid'];
+        
+        $obj = Order::get_order_by_orderid($order_id);
+        if ($obj->status != 'processing') {
+          $msg = 'Confirmed order could not be changed anymore.';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+
+        // change quantity
+        if (!isset($_POST['itemid']) || !isset($_POST['quantity'])) {
+          $msg = 'Missing item id to perform this operation!';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal Request!');
+          exit;
+        }
+        
+        $item_id = $_POST['itemid'];
+        $quantity = $_POST['quantity'];
+        if (OrderItem::update_quantity_by_itemid($item_id, $quantity)) {
+          require 'views/html_header.php';
+          require 'views/navbar.php';
+          require 'views/order_detail.php';
+          require 'views/html_footer.php';
+        } else {
+          $msg = 'Can not update item quantity right now!';
+          redirect_page($path, 'orders.php', '4', $msg, 'Updating Failed!');
+        }
+        
+        exit;
+      
+      } elseif (isset($_POST['type']) && $_POST['type'] == 'edit_form') {
+        if (!isset($_POST['orderid'])) {
+          $msg = 'Missing order id to continue operation.';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        $order_id = $_POST['orderid'];
+        
+        $obj = Order::get_order_by_orderid($order_id);
+        
+        if (!$obj) {
+          $msg = 'Not found this order id in database';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        if ($obj->status != 'processing') {
+          $msg = 'Confirmed order could not be changed anymore.';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        
+        $order = new Order();
+        $order->init_from_db_object($obj);
+        $type = 'edit';
+        
+        // show html order form
+        require 'views/html_header.php';
+        require 'views/navbar.php';
+        require 'views/order_form.php';
+        require 'views/html_footer.php';
+        exit;
+      } elseif (isset($_POST['type']) && $_POST['type'] == 'edit') {
+        if (!isset($_POST['orderid'])) {
+          $msg = 'Missing order id to continue operation.';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        $order_id = $_POST['orderid'];
+        
+        $obj = Order::get_order_by_orderid($order_id);
+        
+        if (!$obj) {
+          $msg = 'Not found this order id in database';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        if ($obj->status != 'processing') {
+          $msg = 'Confirmed order could not be changed anymore.';
+          redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
+          exit;
+        }
+        
+        $user_name = $_POST['username'];
+        $flight_no = $_POST['flightno'];
+        $flight_date = $_POST['flightdate'];
+        $flight_seat = $_POST['flightseat'];
+        $requirement = $_POST['requirement'];
+        $order = form_prechecking($path, $user_id, $user_name, $flight_no, 
+                            $flight_date, $flight_seat, $requirement);
+        
+        $order->set_booking_date($obj->booking_date);
+        $order->set_status($obj->status);
+        $order->set_orderid($obj->order_id);
+        
+        echo $requirement;
+        
+        if (!($order->update_in_db())) {
+          $msg = 'Can not update order info this time';
+          redirect_page($path, 'orders.php', '4', $msg, 'Unknown error!!!');
+          exit;
+        }
       }
-      
-      
       
       // show order list
       $limit = 10;
