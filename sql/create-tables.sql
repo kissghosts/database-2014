@@ -60,11 +60,13 @@ create table order_items
 );
 
 create table notifications
-{
+(
     notification_id     serial              not null,
     user_id             serial              not null,
+    title               varchar(128)        not null,
     message             text                not null,
     is_read             boolean             not null,
+    add_date            date                not null,
     CONSTRAINT pk PRIMARY KEY (notification_id),
     CONSTRAINT fk FOREIGN KEY (user_id) REFERENCES users(user_id)
-};
+);

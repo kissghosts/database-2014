@@ -76,6 +76,37 @@ class Order {
   }
   
   /*
+   * get all of the unconfirmed orders by flight number
+   * input: limit, offset
+   * return PDO fetchAll array (style PDO::FETCH_OBJ)
+   */
+  public static function get_unconfirmed_orders_by_flightno_and_flightdate(
+      $flight_no, $flight_date, $limit, $offset) {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "SELECT * FROM orders WHERE status = ? AND flight_no = ?"
+            . " AND flight_date = ? ORDER BY order_id DESC LIMIT ? OFFSET ?";
+    $query = $conn->prepare($sql);
+    $query->execute(array('processing', $flight_no, $flight_date, $limit, $offset));
+
+    $rows = $query->fetchAll(PDO::FETCH_OBJ);
+    return $rows;
+  }
+  
+  /*
+   * get row number of unconfirmed orders by flightno
+   * return row number
+   */
+  public static function get_unconfirmed_order_num_by_flightno_and_flightdate(
+      $flight_no, $flight_date) {
+    $sql = "SELECT count(*) FROM orders WHERE status = ? AND flight_no = ? "
+          . "AND flight_date = ?";
+    $query = get_db_connection()->prepare($sql);
+    $query->execute(array('processing', $flight_no, $flight_date));
+    return $query->fetchColumn();
+  }
+  
+  /*
    * get row number of unconfirmed orders
    * return row number
    */

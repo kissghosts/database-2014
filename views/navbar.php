@@ -28,6 +28,13 @@
               <li><a href="<?php echo $path; ?>orders.php">Orders</a></li>
             </ul>
           </li>
+          <?php 
+            require_once(dirname(__FILE__).'/../lib/models/notification.php');
+            $user_id = $_SESSION['valid_user'];
+            $num = Notification::get_unread_notification_num_by_userid($user_id);
+          ?>
+          
+          <li><a href="<?php echo "$path"; ?>notifications.php">Notification <span class="badge"><?php echo $num; ?></span></a></li>
           <li><a href="<?php echo "$path"; ?>shopping_cart.php">Shopping Cart</a></li>
           <li><a href="<?php echo "$path"; ?>logout.php">Log Out</a></li>
         <?php } else { ?>

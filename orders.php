@@ -6,6 +6,7 @@
   require_once 'lib/models/product.php';
   require_once 'lib/models/cart_item.php';
   require_once 'lib/models/order_item.php';
+  require_once 'lib/models/notification.php';
   
   // used for input checking
   function form_prechecking($path, $user_id, $user_name, $flight_no, 
@@ -404,6 +405,19 @@
         
         if (!($order->update_in_db())) {
           $msg = 'Can not update order info this time';
+          redirect_page($path, 'orders.php', '4', $msg, 'Unknown error!!!');
+          exit;
+        }
+        
+        $notification = new Notification();
+        $notification->set_userid($obj->user_id);
+        $notification->set_title('Order has been confirmed.');
+        $msg = 'Your order for ' . $order->get_flight_no() . ' on ' 
+                . $order->get_flight_date() . ' has been confirmed. '
+              . 'You can not edit it from now on.';
+        $notification->set_message($msg);
+        if (!($notification->insert_to_db())) {
+          $msg = 'Can not generate notification';
           redirect_page($path, 'orders.php', '4', $msg, 'Unknown error!!!');
           exit;
         }

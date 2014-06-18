@@ -5,7 +5,7 @@
     echo "<h2>No related produtc found!!!</h2>";
   } else {
     foreach($products as $pdt) { ?>
-      <div class="col-xs-6 col-md-3 thumbnails">
+      <div class="col-xs-4 col-sm-3 col-md-3 thumbnails">
         <article class="thumbnails">
           <a href="<?php echo $path."product_info.php?id=".$pdt->get_id(); ?>">
             <img src="<?php echo $pdt->get_image_info(); ?>" class="img-responsive" alt="Generic placeholder thumbnail">
