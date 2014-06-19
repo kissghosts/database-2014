@@ -67,7 +67,7 @@
       }
 
       $notification_total_num = Notification::get_notification_num_by_userid($user_id);
-      $page_total_num = ceil($notification_total_num/$limit);
+      $total_page_num = ceil($notification_total_num/$limit);
 
       foreach(Notification::get_notifications_by_userid($user_id, $limit, $offset) as $n) {
         $notification = new Notification();
