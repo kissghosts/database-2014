@@ -136,9 +136,9 @@ class Order {
   public static function delete_order_by_orderid($order_id) {
     // connect to db
     $conn = get_db_connection();
-    $sql = "DELETE FROM orders WHERE order_id = '" . $order_id . "'";
+    $sql = "DELETE FROM orders WHERE order_id = ?";
     $query = $conn->prepare($sql);
-    $r = $query->execute();
+    $r = $query->execute(array($order_id));
 
     return $r;
   }

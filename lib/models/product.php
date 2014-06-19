@@ -41,10 +41,9 @@ class Product {
   public static function get_product_by_name_and_category($name, $category) {
     // connect to db
     $conn = get_db_connection();
-    $sql = "SELECT * FROM products WHERE name='" . $name . "' and category='"
-          .$category . "'";
+    $sql = "SELECT * FROM products WHERE name= ? and category= ?";
     $query = $conn->prepare($sql);
-    $query->execute();
+    $query->execute(array($name, $category));
 
     $r = $query->fetch(PDO::FETCH_OBJ);
     return $r;
@@ -102,9 +101,9 @@ class Product {
    * return row number
    */
   public static function get_product_num_by_category($category) {
-    $sql = "SELECT count(*) FROM products WHERE category='" . $category . "'";
+    $sql = "SELECT count(*) FROM products WHERE category = ?";
     $query = get_db_connection()->prepare($sql);
-    $query->execute();
+    $query->execute(array($category));
     return $query->fetchColumn();
   }
 
@@ -134,10 +133,10 @@ class Product {
   public static function get_products_by_category($category, $limit, $offset) {
     // connect to db
     $conn = get_db_connection();
-    $sql = "SELECT * FROM products WHERE category='" . $category 
-            . "' ORDER BY name LIMIT ? OFFSET ?";
+    $sql = "SELECT * FROM products WHERE category= ?" 
+            . " ORDER BY name LIMIT ? OFFSET ?";
     $query = $conn->prepare($sql);
-    $query->execute(array($limit, $offset));
+    $query->execute(array($category, $limit, $offset));
 
     $rows = $query->fetchAll(PDO::FETCH_OBJ);
     return $rows;
@@ -179,9 +178,9 @@ class Product {
   public static function get_product_by_id($id) {
     // connect to db
     $conn = get_db_connection();
-    $sql = "SELECT * FROM products WHERE product_id='" . $id . "'";
+    $sql = "SELECT * FROM products WHERE product_id = ?";
     $query = $conn->prepare($sql);
-    $query->execute();
+    $query->execute(array($id));
 
     $row = $query->fetch(PDO::FETCH_OBJ);
     return $row;
@@ -196,9 +195,9 @@ class Product {
   public static function delete_product_by_id($id) {
     // connect to db
     $conn = get_db_connection();
-    $sql = "DELETE FROM products WHERE product_id = '" . $id . "'";
+    $sql = "DELETE FROM products WHERE product_id = ?";
     $query = $conn->prepare($sql);
-    $r = $query->execute();
+    $r = $query->execute(array($id));
 
     return $r;
   }

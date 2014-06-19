@@ -48,9 +48,9 @@ class User {
   public static function is_user_existed_in_db($email) {
     $conn = get_db_connection();
     // check whether email address exists in db
-    $sql = "SELECT * from users where email = '".$email."'";
+    $sql = "SELECT * from users where email = ?";
     $query = $conn->prepare($sql);
-    $query->execute();
+    $query->execute(array($email));
     $result = $query->fetch();
     
     if (!$result) {
@@ -67,10 +67,9 @@ class User {
    */
   public static function get_user_by_email_and_passwd($email, $passwd) {
     $conn = get_db_connection();
-    $sql = "SELECT * from users where email = '".$email."' and passwd = '"
-            . $passwd . "'";
+    $sql = "SELECT * from users where email = ? AND passwd = ?";
     $query = $conn->prepare($sql);
-    $query->execute();
+    $query->execute(array($email, $passwd));
 
     $result = $query->fetch(PDO::FETCH_OBJ);
     return $result;
