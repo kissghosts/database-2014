@@ -21,7 +21,23 @@
     if (User::is_user_existed_in_db($email)) {
       throw new Exception('Your given email has been registered');
     }
-    $id = User::register_user_in_db($email, $passwd, $fname, $lname, $title);
+    $user = new User();
+    $user->set_email($email);
+    $user->set_fname($fname);
+    $user->set_lname($lname);
+    $user->set_passwd($passwd);
+    $user->set_title($title);
+    
+    if ($user->contains_error_attribute()) { // illegal input
+      require 'views/html_header.php';
+      require 'views/simple_navbar.php';
+      require 'views/signup_form.php';
+      require 'views/html_footer_with_form_hash.php';
+      exit;
+    }
+    
+    $user->add_in_db();
+    $id = $user->get_id();
     
     // register session variable
     if ($title == 'customer') {

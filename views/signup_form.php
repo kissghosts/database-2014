@@ -1,5 +1,16 @@
 <div class="container col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
-  <h1>Sign Up</h1>
+  
+  <?php if (isset($user) && $user->contains_error_attribute()) { ?>
+    <br>
+    <div class="alert alert-danger">
+      <?php echo "<strong>Input Error: </strong>";
+      foreach($user->get_error_array() as $error) {
+        echo "$error <br>";
+      } ?>
+    </div>
+  <?php } ?>
+  
+  <h1>User Info</h1>
   <form method="post" action="<?php echo "$path"; ?>process_signup.php" accept-charset="UTF-8" class="form-horizontal" role="form">
     <fieldset>
       <!-- Form Name -->

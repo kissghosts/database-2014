@@ -10,9 +10,12 @@ class User {
   private $email;
   private $password;
   private $title;
+  
+  private $errors = array();
 
   public function __construct() {
-    
+    // leave empry now
+    // use setters to init
   }
   
   /*
@@ -93,7 +96,15 @@ class User {
   }
   
   public function set_fname($fn) {
-    $this->fname = $fn;
+    $this->fname = trim($fn);
+    
+    if ($this->fname == '') {
+      $this->errors['fname'] = "First name should not be blank.";
+    } elseif (strlen($this->fname) >= 30) {
+      $this->errors['fname'] = "First name is too long.";
+    } else { 
+      unset($this->errors['fname']);
+    }
   }
 
   public function set_email($email) {
@@ -101,7 +112,15 @@ class User {
   }
   
   public function set_lname($ln) {
-    $this->lname = $ln;
+    $this->lname = trim($ln);
+    
+    if ($this->lname == '') {
+      $this->errors['lname'] = "Last name should not be blank.";
+    } elseif (strlen($this->lname) >= 30) {
+      $this->errors['lname'] = "Last name is too long.";
+    } else { 
+      unset($this->errors['lname']);
+    }
   }
   
   public function get_id() {
@@ -136,6 +155,14 @@ class User {
     return $this->title;
   }
   
+  public function contains_error_attribute() {
+    return !empty($this->errors);
+  }
+  
+  public function get_error_array() {
+    return $this->errors;
+  }
+  
   public function init_from_db_object($obj) {
     $this->set_id($obj->user_id);
     $this->set_title($obj->title);
@@ -145,4 +172,40 @@ class User {
     $this->set_passwd($obj->passwd);
   }
 
+  /*
+   * register new person with db
+   * return true or throw exception
+   */
+  public function add_in_db() {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "INSERT INTO users (title, fname, lname, email, passwd) VALUES "
+          . "(?, ?, ?, ?, ?) RETURNING user_id";
+    $query = $conn->prepare($sql);
+    $result = $query->execute(array($this->title, $this->fname, $this->lname,
+                                    $this->email, $this->password));
+
+    if (!$result) {
+      throw new Exception('Could not register, please try it later');
+    }
+    $this->set_id($query->fetchColumn());
+    return $result;
+  }
+  
+  /*
+   * updata user info in db
+   * return true or false
+   */
+  public function update_in_db() {
+    // connect to db
+    $conn = get_db_connection();
+    $sql = "UPDATE users SET fname = ?, lname = ?, "
+            . "email = ?, passwd = ?, title = ? WHERE user_id = ?";
+
+    $query = $conn->prepare($sql);
+    $result = $query->execute(array($this->fname, $this->lname, $this->email,
+                                    $this->password, $this->id));
+    return $result;
+  }
+  
 }

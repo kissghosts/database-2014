@@ -24,7 +24,6 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="#">User Info</a></li>
               <li><a href="<?php echo $path; ?>orders.php">Orders</a></li>
             </ul>
           </li>
