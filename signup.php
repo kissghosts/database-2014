@@ -1,5 +1,7 @@
 <?php
   
+  // mainly for displaying signup form
+
   $path = '';
 
   require 'views/html_header.php';

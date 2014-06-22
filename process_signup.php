@@ -1,5 +1,12 @@
 <?php
 
+  /**
+  * controller for signup
+  * add new user into database
+  *
+  * @author yfliu
+  */
+
   require_once 'lib/models/user.php';
   require_once 'lib/view_components.php';
 

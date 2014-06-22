@@ -1,12 +1,18 @@
 <?php
 
+  /**
+  * controller for user login
+  * 
+  * @author yfliu
+  */
+
   require_once 'lib/models/user.php';
   require_once('lib/view_components.php');
   
   session_start();
   $path = '';
   
-  if (isset($_POST['email']) && isset($_POST['p'])) {
+  if (isset($_POST['email']) && isset($_POST['p'])) { // require email and password
     $email = $_POST['email'];
     $passwd = $_POST['p'];
 

@@ -1,5 +1,12 @@
 <?php
 
+  /**
+  * controller for shopping cart checkout
+  * mainly for generating checkout form
+  *
+  * @author yfliu
+  */
+
   require_once 'lib/view_components.php';
   require_once 'lib/models/user.php';
   

@@ -1,5 +1,12 @@
 <?php
 
+  /**
+  * controller for shopping cart
+  * used for display and edit user shopping cart
+  *
+  * @author yfliu
+  */
+
   require_once 'lib/models/cart_item.php';
   require_once 'lib/models/product.php';
   require_once 'lib/view_components.php';

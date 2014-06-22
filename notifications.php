@@ -1,5 +1,12 @@
 <?php
 
+  /**
+  * controller for notifications
+  * view notificaitons, and delete notifications
+  *
+  * @author yfliu
+  */
+
   require_once 'lib/view_components.php';
   require_once 'lib/models/user.php';
   require_once 'lib/models/notification.php';
@@ -10,10 +17,10 @@
   
   try { // in case that any unknown error happens (e.g. db error)
     
-    if (isset($_SESSION['valid_user'])) {
+    if (isset($_SESSION['valid_user'])) { // for customer
       $user_id = $_SESSION['valid_user'];
     
-      if (isset($_GET['id'])) {
+      if (isset($_GET['id'])) { // display specified notification with id
         $id = $_GET['id'];
         $notification = new Notification();
         $obj = Notification::get_notification_by_id($id);
@@ -35,7 +42,7 @@
         require 'views/notification_detail.php';
         require 'views/html_footer.php';
         exit;
-      } elseif (isset($_POST['type']) && $_POST['type'] == 'delete') {    
+      } elseif (isset($_POST['type']) && $_POST['type'] == 'delete') { // delete
       
         // delete one order
         if (!isset($_POST['id'])) {

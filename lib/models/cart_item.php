@@ -2,7 +2,8 @@
 
 
 /**
- * Description of cart_item
+ * model class of shopping cart item
+ * all the database-related functions are put here 
  *
  * @author yfliu
  */

@@ -1,4 +1,14 @@
 <?php
+  
+  /**
+  * controller for index homepage
+  * display all the view stuff for the homepage
+  *
+  * @author yfliu
+  */
+
+
+
   // home page for the shopping cart
   require_once 'lib/db.php';
   require_once 'lib/models/product.php';
@@ -39,7 +49,7 @@
       }
     }
 
-    if (isset($_POST['search'])) {
+    if (isset($_POST['search'])) { // display search results
       $search_keyword = $_POST['search'];
       $product_total_num = Product::get_product_num_by_search($search_keyword);
 
@@ -47,7 +57,7 @@
         $product = init_product_from_fetch_object($p);
         $products[] = $product;
       }
-    } elseif (isset($_GET['category'])) {
+    } elseif (isset($_GET['category'])) { // display products by category
       $category = $_GET['category'];
       $product_total_num = Product::get_product_num_by_category($category);
 
@@ -55,7 +65,7 @@
         $product = init_product_from_fetch_object($p);
         $products[] = $product;
       }
-    } else { // all products
+    } else { // display all products
       $product_total_num = Product::get_product_num();
 
       foreach(Product::get_products($limit, $offset) as $p) {
@@ -67,7 +77,7 @@
     $total_page_num = ceil($product_total_num/$limit);
 
 
-    // html view
+    // final html view
     require 'views/html_header.php';
     require 'views/navbar.php';
     require 'views/main_body_start.php';

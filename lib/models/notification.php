@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Description of notification
+ * corresponding to the table notificaiton in db
+ * all the database-related functions are put here
  *
  * @author yfliu
  */

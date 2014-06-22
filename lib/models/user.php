@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * model class for table users
+ * all the database-related functions for table users are defined here
+ *
+ * @author yfliu
+ */
+
 require_once(dirname(__FILE__).'/../db.php');
 
 class User {

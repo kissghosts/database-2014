@@ -1,4 +1,13 @@
 <?php
+  
+  /**
+  * controller for orders
+  * handling for the stuff for orders
+  * add, delete, edit, and view
+  *
+  * @author yfliu
+  */
+
 
   require_once 'lib/view_components.php';
   require_once 'lib/models/user.php';
@@ -230,7 +239,7 @@
         exit;
         
       } elseif (isset($_POST['type']) && $_POST['type'] == 'view') {
-        // view details or edit
+        // view details
         if (!isset($_POST['orderid'])) {
           $msg = 'Missing order id to continue operation.';
           redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
@@ -242,6 +251,8 @@
         exit;
         
       } elseif (isset($_POST['type']) && $_POST['type'] == 'update') { 
+        // update order item quantity
+        
         if (!isset($_POST['orderid'])) {
           $msg = 'Missing order id to continue operation.';
           redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
@@ -275,6 +286,8 @@
         exit;
       
       } elseif (isset($_POST['type']) && $_POST['type'] == 'edit_form') {
+        // generate order edit form
+        
         if (!isset($_POST['orderid'])) {
           $msg = 'Missing order id to continue operation.';
           redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
@@ -306,6 +319,8 @@
         require 'views/html_footer.php';
         exit;
       } elseif (isset($_POST['type']) && $_POST['type'] == 'edit') {
+        // edit order details
+        
         if (!isset($_POST['orderid'])) {
           $msg = 'Missing order id to continue operation.';
           redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
@@ -352,7 +367,7 @@
       show_customer_order_list($user_id, $path);
       exit;
       
-    } elseif (isset($_SESSION['staff_user'])) {
+    } elseif (isset($_SESSION['staff_user'])) { // flight company staff
       if (isset($_POST['type']) && $_POST['type'] == 'delete') {
         // delete one order
         if (!isset($_POST['orderid'])) {
@@ -378,7 +393,7 @@
         exit;
         
       } elseif (isset($_POST['type']) && $_POST['type'] == 'confirm') {
-        // delete one order
+        // confirm one order
         if (!isset($_POST['orderid'])) {
           $msg = 'Missing order id to continue operation.';
           redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
@@ -393,6 +408,7 @@
           redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
           exit;
         }
+        // change status to 'confirmed'
         if ($obj->status != 'processing') {
           $msg = 'Confirmed order could not be changed anymore.';
           redirect_page($path, 'orders.php', '4', $msg, 'Illegal request');
@@ -409,6 +425,7 @@
           exit;
         }
         
+        // generate a new notification to customer
         $notification = new Notification();
         $notification->set_userid($obj->user_id);
         $notification->set_title('Order has been confirmed.');

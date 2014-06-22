@@ -1,4 +1,11 @@
 <?php
+  
+  /**
+  * display product details
+  *
+  * @author yfliu
+  */
+
   require_once 'lib/db.php';
   require_once 'lib/models/product.php';
   require_once 'lib/view_components.php';

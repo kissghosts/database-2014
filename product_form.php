@@ -1,5 +1,11 @@
 <?php
   
+  /**
+  * mainly for display product edit or adding form
+  *
+  * @author yfliu
+  */
+
   require_once 'lib/view_components.php';
   require_once 'lib/models/product.php';
 

@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Description of product
+ * model class for table products
+ * all the database-related functions for products table are defined here
  *
  * @author yfliu
  */

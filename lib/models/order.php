@@ -3,10 +3,12 @@
 require_once(dirname(__FILE__).'/../db.php');
 
 /**
- * Description of order
+ * model class for table orders
+ * all the database-related functions are defined here
  *
  * @author yfliu
  */
+
 class Order {
   private $order_id;
   private $user_id;
@@ -204,7 +206,7 @@ class Order {
     } elseif (preg_match('/^(\d{4}-\d{2}-\d{2})$/', $this->flight_date) != 1) {
       $this->errors['flight_date'] = "Unexpected data format, "
                                     . "should be like this yyyy-mm-dd";
-    } else { 
+    } else { // validate date, can not choose a passed date
       $today = date('Y-m-d');
       $cur_date = strtotime($today);
       $input_date = strtotime($this->flight_date);

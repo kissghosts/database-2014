@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * model class for order item table
+ * all the database-related functions for order_items are defined here
+ *
+ * @author yfliu
+ */
+
 require_once(dirname(__FILE__).'/../db.php');
 
 class OrderItem {

@@ -1,5 +1,12 @@
 <?php
 
+  /**
+  * controller for products
+  * adding, deleting, and editing
+  *
+  * @author yfliu
+  */
+
   require_once 'lib/models/product.php';
   require_once 'lib/view_components.php';
   

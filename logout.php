@@ -1,4 +1,10 @@
 <?php
+  
+  /**
+  * controller for logout, delete session variable
+  *
+  * @author yfliu
+  */
 
   session_start();
   
